@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Proton Bragg Peak — 270 MeV Clinical Experiment</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --cyan:#00d4ff;--green:#00ffaa;--orange:#f59e0b;
+  --red:#f87171;--purple:#a78bfa;--blue:#3b82f6;--gold:#fbbf24;
+  --bg:#00020c;--bg2:rgba(0,4,18,.94);--bg3:rgba(0,2,10,.88);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Rajdhani',sans-serif;color:#fff}
+#cv{position:fixed;top:0;left:0;width:100%;height:100%}
+#ui{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none}
+#topbar{position:absolute;top:0;left:0;right:0;height:52px;
+  background:linear-gradient(180deg,rgba(0,0,0,.97) 0%,transparent 100%);
+  display:flex;align-items:center;justify-content:space-between;padding:0 22px;
+  border-bottom:1px solid rgba(0,212,255,.08)}
+.tb-l .brand{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;
+  color:var(--cyan);letter-spacing:.22em;text-shadow:0 0 22px #00d4ff44}
+.tb-l .sub{font-family:'Share Tech Mono',monospace;font-size:8px;
+  color:#0af;letter-spacing:.14em;opacity:.55;margin-top:2px}
+.tb-r{display:flex;gap:18px;align-items:center}
+.kv{text-align:right}
+.kv-l{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:#333;letter-spacing:.16em}
+.kv-v{font-family:'Orbitron',monospace;font-size:16px;letter-spacing:.04em;line-height:1}
+#steps{position:absolute;top:62px;left:14px;display:flex;flex-direction:column;gap:3px}
+.st{display:flex;align-items:center;gap:7px;padding:4px 8px;border-radius:6px;transition:all .3s;opacity:.2}
+.st.active{opacity:1;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.16)}
+.st.done{opacity:.45}
+.stn{font-family:'Share Tech Mono',monospace;font-size:8.5px;width:17px;height:17px;
+  border-radius:50%;border:1px solid rgba(0,212,255,.35);
+  display:flex;align-items:center;justify-content:center;color:var(--cyan);flex-shrink:0}
+.st.done .stn{background:rgba(0,212,255,.14)}
+.stt{font-size:11px;color:#5a7090;letter-spacing:.02em}
+.st.active .stt,.st.done .stt{color:#b0c8e0}
+#mets{position:absolute;top:62px;right:14px;width:172px;display:flex;flex-direction:column;gap:5px}
+.met{background:var(--bg2);border:1px solid;border-radius:7px;padding:7px 11px}
+.met-l{font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:.12em;opacity:.55;margin-bottom:1px}
+.met-v{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;letter-spacing:.02em}
+.met-u{font-size:7.5px;font-weight:400;margin-left:2px;opacity:.45}
+#scard{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;transition:opacity .4s}
+.sc-num{font-family:'Share Tech Mono',monospace;font-size:9px;
+  color:var(--cyan);letter-spacing:.36em;margin-bottom:5px}
+.sc-ttl{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;
+  letter-spacing:.05em;text-shadow:0 0 44px rgba(0,212,255,.5);line-height:1.1}
+.sc-sub{font-family:'Rajdhani',sans-serif;font-size:13px;color:#7a9ab0;
+  margin-top:7px;letter-spacing:.08em}
+#ann{position:absolute;bottom:86px;left:50%;transform:translateX(-50%);
+  width:min(900px,90vw);background:var(--bg2);
+  border:1px solid rgba(0,212,255,.14);border-radius:10px;
+  padding:11px 18px;backdrop-filter:blur(18px)}
+.an-tag{font-family:'Share Tech Mono',monospace;font-size:7.5px;color:var(--cyan);
+  letter-spacing:.26em;margin-bottom:4px}
+.an-body{font-size:13.5px;line-height:1.5;color:#ccdde8}
+.an-eq{font-family:'Share Tech Mono',monospace;font-size:10.5px;color:var(--green);
+  margin-top:6px;background:rgba(0,255,170,.04);padding:5px 9px;
+  border-radius:4px;border-left:2px solid var(--green);display:none}
+.an-warn{font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--orange);
+  margin-top:5px;background:rgba(245,158,11,.06);padding:5px 9px;
+  border-radius:4px;border-left:2px solid var(--orange);display:none}
+#ctrl{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;align-items:center;
+  background:rgba(0,3,16,.94);border:1px solid #ffffff08;
+  border-radius:44px;padding:6px 14px;pointer-events:all;flex-wrap:nowrap}
+.btn{background:none;border:1px solid rgba(0,212,255,.26);color:var(--cyan);
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 10px;
+  border-radius:24px;cursor:pointer;letter-spacing:.07em;transition:all .2s}
+.btn:hover{background:rgba(0,212,255,.1);border-color:var(--cyan)}
+.btn-p{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.65);color:#00ffff}
+.btn-export{border-color:rgba(0,255,170,.35);color:var(--green)}
+.btn-export:hover{background:rgba(0,255,170,.1);border-color:var(--green)}
+.btn-e{border-color:rgba(251,191,36,.3);color:#fbbf24;font-size:8.5px;padding:3px 9px}
+.btn-e:hover{background:rgba(251,191,36,.1);border-color:#fbbf24}
+.btn-e.active-e{background:rgba(251,191,36,.2);border-color:#fbbf24;color:#fff;box-shadow:0 0 8px rgba(251,191,36,.3)}
+.btn-m{border-color:rgba(96,165,250,.3);color:#60a5fa;font-size:8.5px;padding:3px 9px}
+.btn-m:hover{background:rgba(96,165,250,.1);border-color:#60a5fa}
+.btn-m.active-m{background:rgba(96,165,250,.2);border-color:#60a5fa;color:#fff;box-shadow:0 0 8px rgba(96,165,250,.3)}
+.btn-int{border-color:rgba(248,113,113,.35);color:#f87171;font-size:8.5px;padding:3px 10px}
+.btn-int:hover{background:rgba(248,113,113,.1);border-color:#f87171}
+.ctrl-sep{width:1px;height:22px;background:rgba(255,255,255,.08);margin:0 2px;flex-shrink:0}
+.ctrl-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:#334466;letter-spacing:.1em;white-space:nowrap}
+#pb-wrap{width:110px;height:2px;background:#ffffff06;border-radius:2px;flex-shrink:0}
+#pb{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:2px;transition:width .08s linear}
+#dots{display:flex;gap:5px}
+.dot{width:5px;height:5px;border-radius:50%;border:1px solid rgba(0,212,255,.28);
+  cursor:pointer;transition:all .2s;pointer-events:all}
+.dot.on{background:var(--cyan);box-shadow:0 0 5px var(--cyan)}
+#scanline{position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
+  animation:scanMove 8s linear infinite;opacity:.5}
+@keyframes scanMove{0%{background-position:0 0}100%{background-position:0 100px}}
+</style>
+</head>
+<body>
+<div id="scanline"></div>
+<canvas id="cv"></canvas>
+<div id="ui">
+  <div id="topbar">
+    <div class="tb-l">
+      <div class="brand">⚛ PROTON BRAGG PEAK — 270 MeV CLINICAL EXPERIMENT</div>
+      <div class="sub">MIXED BEAM · C/Al DEGRADER (NIST PSTAR) · DWC PROFILING · TOF DISCRIMINATION · BLOCK-STACK · BONE HETEROGENEITY · GNP GELATIN SHIELDING</div>
+    </div>
+    <div class="tb-r">
+      <div class="kv"><div class="kv-l">BEAM ENERGY</div>
+        <div class="kv-v" style="color:var(--cyan)" id="kv-e">250 MeV</div></div>
+      <div class="kv"><div class="kv-l">RANGE</div>
+        <div class="kv-v" style="color:var(--green)" id="kv-r">—</div></div>
+      <div class="kv"><div class="kv-l">INTENSITY</div>
+        <div class="kv-v" style="color:var(--orange)" id="kv-i">1.0×</div></div>
+      <div class="kv"><div class="kv-l">SCENE</div>
+        <div class="kv-v" style="color:var(--orange)" id="kv-s">1/11</div></div>
+    </div>
+  </div>
+
+  <div id="steps">
+    <div class="st" id="st0"><div class="stn">1</div><div class="stt">Apparatus Overview</div></div>
+    <div class="st" id="st1"><div class="stn">2</div><div class="stt">Degrader Materials</div></div>
+    <div class="st" id="st2"><div class="stn">3</div><div class="stt">DWC Beam Profiling</div></div>
+    <div class="st" id="st3"><div class="stn">4</div><div class="stt">TOF Discrimination</div></div>
+    <div class="st" id="st4"><div class="stn">5</div><div class="stt">Bragg Peak — Jelly</div></div>
+    <div class="st" id="st5"><div class="stn">6</div><div class="stt">Block-Stack Method</div></div>
+    <div class="st" id="st6"><div class="stn">7</div><div class="stt">Nuclear Tail</div></div>
+    <div class="st" id="st7"><div class="stn">8</div><div class="stt">Bone 0° — WET</div></div>
+    <div class="st" id="st8"><div class="stn">9</div><div class="stt">Bone 60° — Max Shift</div></div>
+    <div class="st" id="st9"><div class="stn">10</div><div class="stt">Clinical Results</div></div>
+    <div class="st" id="st10"><div class="stn">11</div><div class="stt">GNP Gelatin Layer</div></div>
+  </div>
+
+  <div id="mets">
+    <div class="met" style="border-color:rgba(0,212,255,.2)">
+      <div class="met-l" style="color:var(--cyan)">BRAGG PEAK DEPTH</div>
+      <div class="met-v" style="color:var(--cyan)" id="m0">—<span class="met-u">cm</span></div>
+    </div>
+    <div class="met" style="border-color:rgba(0,255,170,.2)">
+      <div class="met-l" style="color:var(--green)">RANGE SHIFT (BONE)</div>
+      <div class="met-v" style="color:var(--green)" id="m1">—<span class="met-u">cm</span></div>
+    </div>
+    <div class="met" style="border-color:rgba(245,158,11,.2)">
+      <div class="met-l" style="color:var(--orange)">DEGRADER THICKNESS</div>
+      <div class="met-v" style="color:var(--orange)" id="m2">—<span class="met-u">cm</span></div>
+    </div>
+    <div class="met" style="border-color:rgba(248,113,113,.2)">
+      <div class="met-l" style="color:var(--red)">TOF Δt (p vs K⁺)</div>
+      <div class="met-v" style="color:var(--red)" id="m3">—<span class="met-u">ns</span></div>
+    </div>
+    <div class="met" style="border-color:rgba(167,139,250,.2)">
+      <div class="met-l" style="color:var(--purple)">BEAM DIAMETER</div>
+      <div class="met-v" style="color:var(--purple)" id="m4">—<span class="met-u">mm</span></div>
+    </div>
+    <div class="met" style="border-color:rgba(251,191,36,.3)">
+      <div class="met-l" style="color:var(--gold)">GNP TAIL SUPPRESSION</div>
+      <div class="met-v" style="color:var(--gold)" id="m5">—<span class="met-u">%</span></div>
+    </div>
+  </div>
+
+  <div id="scard">
+    <div class="sc-num" id="sc-num"></div>
+    <div class="sc-ttl" id="sc-ttl"></div>
+    <div class="sc-sub" id="sc-sub"></div>
+  </div>
+
+  <div id="ann">
+    <div class="an-tag" id="an-tag">OVERVIEW</div>
+    <div class="an-body" id="an-body">Initialising…</div>
+    <div class="an-eq" id="an-eq"></div>
+    <div class="an-warn" id="an-warn"></div>
+  </div>
+
+  <div id="ctrl">
+    <div id="dots"></div>
+    <button class="btn" id="b-prev">◀ PREV</button>
+    <button class="btn btn-p" id="b-play">⏸ PAUSE</button>
+    <button class="btn" id="b-next">NEXT ▶</button>
+    <div id="pb-wrap"><div id="pb" style="width:0%"></div></div>
+    <button class="btn" id="b-spd">1× SPEED</button>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-lbl">MATERIAL</span>
+    <button class="btn btn-m active-m" id="b-matC" data-mat="C">C</button>
+    <button class="btn btn-m" id="b-matAl" data-mat="Al">AL</button>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-lbl">E-OUT</span>
+    <button class="btn btn-e active-e" id="b-e250" data-loss="20">250</button>
+    <button class="btn btn-e" id="b-e200" data-loss="70">200</button>
+    <button class="btn btn-e" id="b-e150" data-loss="120">150</button>
+    <span class="ctrl-lbl">MeV</span>
+    <div class="ctrl-sep"></div>
+    <button class="btn btn-int" id="b-int">INT 1.0×</button>
+    <div class="ctrl-sep"></div>
+    <button class="btn btn-export" id="b-export">⬇ EXPORT .PY</button>
+  </div>
+</div>
+<script>
+const α=0.0022,P=1.77,SPR_BONE=1.65;
+const E_INIT=270;
+const m_p=938.272,m_k=493.677,m_b10=9324.44;
+const STRAG_FRAC=0.012,DZ=0.05,MAXD=40,N=Math.floor(MAXD/DZ);
+const TOF_L=150,c_ns=29.9792;
+const GNP_T_CM=4.0;
+// FIX 1: Full suppression (100%) — gelatin completely absorbs tail
+const GNP_SUPPRESS=1.0;
+const GNP_RHO_AU=19.3;
+const GNP_Z_AU=79;
+const GNP_CONC_MG=10;
+const MATERIALS={
+  C:{rho:2.265,sp_mass:2.82,name:'Carbon (Graphite)',color:'#a78bfa',Z:6,A:12,col2:'rgba(167,139,250,.35)'},
+  Al:{rho:2.700,sp_mass:3.08,name:'Aluminium',color:'#60a5fa',Z:13,A:27,col2:'rgba(96,165,250,.35)'}
+};
+let CURRENT_MAT='C';
+let DEGRADER_LOSS=20;
+let E0=E_INIT-DEGRADER_LOSS;
+let BEAM_INTENSITY=1.0;
+let RANGE,SP_ENTRY,WET,SHIFT0,SHIFT60,STRAG_SIGMA,ENERGY_STRAG,TOF_DATA,DEGRAD_THICK;
+let DD_W,DD_STRAG,DD_TAIL,DD_B0,DD_B60,DD_GNP,DMAX;
+let GNP_Z_CM;
+
+function computePhysics(){
+  RANGE=α*Math.pow(E0,P);
+  SP_ENTRY=1/(α*P*Math.pow(E0,P-1));
+  WET=1.0*SPR_BONE;
+  SHIFT0=(SPR_BONE-1)*1.0;
+  SHIFT60=(SPR_BONE/Math.cos(Math.PI/3)-1)*1.0;
+  STRAG_SIGMA=STRAG_FRAC*RANGE;
+  ENERGY_STRAG=0.01*E0;
+  const mat=MATERIALS[CURRENT_MAT];
+  DEGRAD_THICK=DEGRADER_LOSS/(mat.sp_mass*mat.rho);
+  const p_p=Math.sqrt(Math.pow(E0+m_p,2)-m_p*m_p);
+  const beta_p=p_p/(E0+m_p);
+  const beta_k=p_p/Math.sqrt(p_p*p_p+m_k*m_k);
+  const p_b=5*p_p;
+  const beta_b=p_b/Math.sqrt(p_b*p_b+m_b10*m_b10);
+  const tP=TOF_L/(beta_p*c_ns);
+  const tK=TOF_L/(beta_k*c_ns);
+  const tB=TOF_L/(beta_b*c_ns);
+  TOF_DATA={tProton:tP,tKaon:tK,tBoron:tB,beta_p,beta_k,beta_b,p_p,dtPK:tP-tK,dtBP:tB-tP};
+}
+
+function smooth(a,sig){
+  const o=new Float64Array(a.length),r=Math.ceil(3*sig);
+  for(let i=0;i<a.length;i++){
+    let s=0,w=0;
+    for(let k=-r;k<=r;k++){
+      const j=i+k;
+      if(j>=0&&j<a.length){const wt=Math.exp(-k*k/(2*sig*sig));s+=a[j]*wt;w+=wt;}
+    }
+    o[i]=w?s/w:0;
+  }
+  return o;
+}
+
+function buildDD(e0,boneZ,boneT,boneAng,useBone,extraStrag=0,nucTail=false){
+  const raw=new Float64Array(N);
+  let e=e0;
+  const ca=Math.max(Math.cos((boneAng||0)*Math.PI/180),0.14);
+  for(let i=0;i<N;i++){
+    if(e<0.12) break;
+    const z=i*DZ;
+    const spr=(useBone&&boneT>0&&z>=boneZ&&z<=boneZ+boneT)?SPR_BONE/ca:1;
+    const sp=1/(α*P*Math.pow(Math.max(e,0.4),P-1));
+    const dE=Math.min(sp*spr*DZ,e);
+    raw[i]=dE/DZ;
+    e-=dE;
+  }
+  const sigPx=(STRAG_SIGMA+extraStrag)/DZ;
+  let dd=smooth(raw,sigPx);
+  if(nucTail){
+    let peakI=0,pv=0;
+    for(let i=0;i<N;i++) if(dd[i]>pv){pv=dd[i];peakI=i;}
+    const tail=new Float64Array(N);
+    for(let i=peakI;i<N;i++) tail[i]=pv*0.012*Math.exp(-(i-peakI)*DZ/3.0);
+    for(let i=0;i<N;i++) dd[i]+=tail[i];
+  }
+  return dd;
+}
+
+// FIX 2: Zero dose past gelatin distal edge
+function buildDD_GNP_tail(gnpZ_cm,gnpT_cm,suppress){
+  const basePrimary=buildDD(E0,null,0,0,false,0,false);
+  const baseTail=buildDD(E0,null,0,0,false,0,true);
+  const out=new Float64Array(N);
+  for(let i=0;i<N;i++){
+    const z=i*DZ;
+    const tailOnly=baseTail[i]-basePrimary[i];
+    if(z>=gnpZ_cm+gnpT_cm){
+      // Nothing past the gelatin — complete absorption
+      out[i]=0;
+    } else if(z>=gnpZ_cm){
+      const frac=(z-gnpZ_cm)/gnpT_cm;
+      out[i]=basePrimary[i]+tailOnly*(1-suppress*frac);
+    } else {
+      out[i]=baseTail[i];
+    }
+  }
+  return out;
+}
+
+function recomputeAll(){
+  computePhysics();
+  DD_W=buildDD(E0,null,0,0,false,0,false);
+  const actualPeak=peakZ(DD_W);
+  // Centre the gelatin layer ON the Bragg peak
+  GNP_Z_CM=Math.max(0.5,Math.min(actualPeak-GNP_T_CM/2,MAXD-GNP_T_CM-0.5));
+  DD_STRAG=buildDD(E0,null,0,0,false,STRAG_SIGMA*.6,false);
+  DD_TAIL=buildDD(E0,null,0,0,false,0,true);
+  DD_B0=buildDD(E0,8,1,0,true,0,false);
+  DD_B60=buildDD(E0,8,1,60,true,0,false);
+  DD_GNP=buildDD_GNP_tail(GNP_Z_CM,GNP_T_CM,GNP_SUPPRESS);
+  DMAX=Math.max(...DD_W);
+  document.getElementById('kv-e').textContent=E0+' MeV';
+  document.getElementById('kv-r').textContent=RANGE.toFixed(2)+' cm';
+  document.getElementById('m2').innerHTML=`${DEGRAD_THICK.toFixed(2)}<span class="met-u">cm</span>`;
+  document.getElementById('m3').innerHTML=`${TOF_DATA.dtPK.toFixed(2)}<span class="met-u">ns</span>`;
+  document.getElementById('m4').innerHTML=`5.0<span class="met-u">mm→2mm</span>`;
+  document.getElementById('m5').innerHTML=`${(GNP_SUPPRESS*100).toFixed(0)}<span class="met-u">%</span>`;
+}
+
+recomputeAll();
+function downloadPython(){
+  const depths=Array.from({length:N},(_,i)=>(i*DZ).toFixed(3));
+  const fmt=arr=>Array.from(arr).map(v=>v.toExponential(6)).join(', ');
+  const td=TOF_DATA;
+  const mat=MATERIALS[CURRENT_MAT];
+  const py=`#!/usr/bin/env python3
+"""
+Proton Bragg Peak — 270 MeV Clinical Experiment
+C/Al NIST PSTAR Degrader | DWC Beam Profiling | TOF Discrimination | Block-Stack | GNP Gelatin
+
+Beam:         ${E_INIT} MeV cyclotron, degraded to ${E0} MeV (loss=${DEGRADER_LOSS} MeV)
+Degrader:     ${mat.name} (rho=${mat.rho} g/cm3, mass_SP=${mat.sp_mass} MeV.cm2/g)
+Thickness:    ${DEGRAD_THICK.toFixed(3)} cm  [NIST PSTAR based]
+Beam profile: DWC — 5mm beam spot focused to 2mm (quadrupole magnets)
+Phantom:      Muscle jelly (rho=1.06 g/cm3), SPR~1.02
+Bone:         SPR=${SPR_BONE}, d=1.0 cm at z=8 cm
+TOF:          L=${TOF_L} cm, mixed beam p+K+B10
+GNP Gelatin:  Au Z=79, conc=${GNP_CONC_MG} mg/mL, thickness=${GNP_T_CM} cm
+              centred ON Bragg peak at z=${GNP_Z_CM.toFixed(2)} cm (layer: ${GNP_Z_CM.toFixed(2)}–${(GNP_Z_CM+GNP_T_CM).toFixed(2)} cm)
+              nuclear tail suppression: ~${(GNP_SUPPRESS*100).toFixed(0)}% (complete — zero dose past gelatin)
+              mechanism: photoelectric (sigma_PE prop Z^4.5/E^3.5) + n-capture (Au-197)
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+
+E0            = ${E0}
+BRAGG_RANGE   = ${RANGE.toFixed(4)}
+GNP_Z_CM      = ${GNP_Z_CM.toFixed(2)}
+GNP_T_CM      = ${GNP_T_CM}
+GNP_SUPPRESS  = ${GNP_SUPPRESS}
+GNP_CONC_MG   = ${GNP_CONC_MG}
+
+depth       = np.array([${depths.join(', ')}])
+dd_water    = np.array([${fmt(DD_W)}])
+dd_tail     = np.array([${fmt(DD_TAIL)}])
+dd_gnp      = np.array([${fmt(DD_GNP)}])
+
+D_MAX = dd_water.max()
+dd_water /= D_MAX
+dd_tail  /= D_MAX
+dd_gnp   /= D_MAX
+
+fig, ax = plt.subplots(figsize=(14,6), facecolor='#0a0a1a')
+ax.set_facecolor('#0d0d22')
+ax.plot(depth, dd_water, color='#00cc88', lw=2.5, label='Muscle Jelly (ref, no tail)')
+ax.plot(depth, dd_tail,  color='#f87171', lw=2, ls='--', label='With nuclear tail (1.2%)')
+ax.plot(depth, dd_gnp,   color='#fbbf24', lw=2.8, label=f'GNP gelatin ON Bragg peak z={GNP_Z_CM:.1f} cm (zero past gelatin)')
+ax.axvspan(GNP_Z_CM, GNP_Z_CM+GNP_T_CM, alpha=0.12, color='#fbbf24', label=f'GNP layer {GNP_T_CM}cm (centred on Bragg peak)')
+ax.axvline(BRAGG_RANGE, color='#00d4ff', lw=1.5, ls=':', label=f'Bragg peak {BRAGG_RANGE:.2f}cm')
+ax.set_xlabel('Depth (cm)'); ax.set_ylabel('Relative Dose')
+ax.set_title(f'GNP Gelatin ON Bragg Peak — {E0} MeV — Zero dose past gelatin')
+ax.legend(fontsize=8); ax.grid(alpha=0.15)
+plt.tight_layout()
+plt.savefig('bragg_gnp_results.png', dpi=150, bbox_inches='tight', facecolor='#0a0a1a')
+plt.show()
+print("Saved: bragg_gnp_results.png")
+`;
+  const blob=new Blob([py],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='bragg_gnp_analysis.py';a.click();
+  URL.revokeObjectURL(url);
+}
+
+const cv=document.getElementById('cv');
+const cx=cv.getContext('2d');
+let W=0,H=0;
+function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+window.addEventListener('resize',()=>{resize();});
+resize();
+
+function rr(x,y,w,h,r){
+  cx.beginPath();cx.moveTo(x+r,y);
+  cx.lineTo(x+w-r,y);cx.arcTo(x+w,y,x+w,y+r,r);
+  cx.lineTo(x+w,y+h-r);cx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  cx.lineTo(x+r,y+h);cx.arcTo(x,y+h,x,y+h-r,r);
+  cx.lineTo(x,y+r);cx.arcTo(x,y,x+r,y,r);cx.closePath();
+}
+
+function arrow(x1,y1,x2,y2,col,lw=1.5){
+  const a=Math.atan2(y2-y1,x2-x1);
+  cx.save();cx.strokeStyle=col;cx.fillStyle=col;cx.lineWidth=lw;
+  cx.beginPath();cx.moveTo(x1,y1);cx.lineTo(x2,y2);cx.stroke();
+  cx.beginPath();cx.moveTo(x2,y2);
+  cx.lineTo(x2-12*Math.cos(a-.4),y2-12*Math.sin(a-.4));
+  cx.lineTo(x2-12*Math.cos(a+.4),y2-12*Math.sin(a+.4));
+  cx.closePath();cx.fill();cx.restore();
+}
+
+function radialGlow(x,y,r,col){
+  const g=cx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');
+  cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.fillStyle=g;cx.fill();
+}
+
+function txt(s,x,y,col='#94a3b8',sz=10,fnt="'Share Tech Mono',monospace",align='center',base='middle'){
+  cx.save();cx.font=`${sz}px ${fnt}`;cx.fillStyle=col;
+  cx.textAlign=align;cx.textBaseline=base;cx.fillText(s,x,y);cx.restore();
+}
+
+function grid(){
+  cx.save();cx.strokeStyle='rgba(0,180,255,.018)';cx.lineWidth=1;
+  for(let x=0;x<W;x+=80){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H);cx.stroke();}
+  for(let y=0;y<H;y+=80){cx.beginPath();cx.moveTo(0,y);cx.lineTo(W,y);cx.stroke();}
+  cx.restore();
+}
+
+function jet(t){
+  t=Math.max(0,Math.min(1,t));
+  let r,g,b;
+  if(t<.125){r=0;g=0;b=.5+4*t;}
+  else if(t<.375){r=0;g=4*(t-.125);b=1;}
+  else if(t<.625){r=4*(t-.375);g=1;b=1-4*(t-.375);}
+  else if(t<.875){r=1;g=1-4*(t-.625);b=0;}
+  else{r=1-4*(t-.875);g=0;b=0;}
+  return`rgb(${~~(r*255)},${~~(g*255)},${~~(b*255)})`;
+}
+
+function hexToComponents(col){
+  if(col.startsWith('#')){
+    const h=col.slice(1);
+    return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+  }
+  const m=col.match(/\d+/g);return[+m[0],+m[1],+m[2]];
+}
+
+const PTCL=[];
+function spawnParticle(x,y,vx,vy,type='proton',stopX=null){
+  const cols={proton:'#00d4ff',kion:'#f97316',bion:'#c084fc',neutron:'#a78bfa',gamma:'#fbbf24',gnp_abs:'#ffd700'};
+  PTCL.push({x,y,vx,vy,life:1,trail:[],type,col:cols[type]||'#00d4ff',stopX,rejected:false,absorbed:false});
+}
+
+function tickParticles(brake=0.04,scatter=0.05){
+  for(let i=PTCL.length-1;i>=0;i--){
+    const p=PTCL[i];
+    if(p.stopX&&!p.rejected&&!p.absorbed&&p.x>=p.stopX&&p.type!=='proton'){
+      if(p.type==='gamma'||p.type==='neutron'){
+        p.absorbed=true;p.life=0.4;p.vx*=0.1;p.vy*=0.1;
+      } else {
+        p.rejected=true;p.vy+=(Math.random()>.5?1:-1)*5;p.vx*=0.3;
+      }
+    }
+    p.trail.push({x:p.x,y:p.y,life:p.life});
+    if(p.trail.length>28) p.trail.shift();
+    if(p.type==='proton'||p.type==='neutron'||p.type==='gamma'){
+      p.vx*=(1-brake*.018);p.vy+=(Math.random()-.5)*scatter;
+    } else {
+      if(p.rejected){p.vx*=0.96;p.vy*=1.02;}
+      else{p.vx*=0.999;p.vy+=(Math.random()-.5)*scatter*.3;}
+    }
+    p.x+=p.vx;p.y+=p.vy;
+    p.life-=0.006+brake*.01;
+    if(p.absorbed) p.life-=0.035;
+    if(p.life<=0||p.x>W+80||p.x<-60||p.y<-60||p.y>H+60){PTCL.splice(i,1);continue;}
+    for(let k=0;k<p.trail.length-1;k++){
+      const f=k/p.trail.length;
+      const a2=f*p.life*(p.rejected?.15:.35);
+      if(a2<0.01) continue;
+      cx.beginPath();cx.moveTo(p.trail[k].x,p.trail[k].y);cx.lineTo(p.trail[k+1].x,p.trail[k+1].y);
+      const [r2,g2,b2]=hexToComponents(p.col);
+      cx.strokeStyle=`rgba(${r2},${g2},${b2},${a2})`;cx.lineWidth=1.2*f+.5;cx.stroke();
+    }
+    const [r2,g2,b2]=hexToComponents(p.col);
+    const grd=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.absorbed?10:6);
+    grd.addColorStop(0,`rgba(220,255,255,${p.life*.9})`);
+    grd.addColorStop(.4,`rgba(${r2},${g2},${b2},${p.life*.6})`);
+    grd.addColorStop(1,'rgba(0,0,0,0)');
+    cx.beginPath();cx.arc(p.x,p.y,p.absorbed?10:6,0,Math.PI*2);cx.fillStyle=grd;cx.fill();
+    cx.beginPath();cx.arc(p.x,p.y,1.6,0,Math.PI*2);
+    cx.fillStyle=`rgba(255,255,255,${p.life})`;cx.fill();
+    if(p.absorbed&&p.life>0.2){
+      radialGlow(p.x,p.y,30,'rgba(255,215,0,.25)');
+    }
+  }
+}
+
+function peakZ(dd){
+  let m=0,pi=0;
+  for(let i=0;i<N;i++) if(dd[i]>m){m=dd[i];pi=i;}
+  return pi*DZ;
+}
+
+function drawChart(opts){
+  const{x,y,w,h,curves,xMax=MAXD,label='Depth (cm)',boneZ,boneT,gnpZ,gnpT,progress=1,title='',showGrid=true}=opts;
+  const iX=x+50,iY=y+16,iW=w-66,iH=h-38;
+  cx.save();
+  cx.fillStyle='rgba(2,6,20,.92)';cx.strokeStyle='rgba(30,55,90,.55)';cx.lineWidth=1.2;
+  rr(x,y,w,h,9);cx.fill();cx.stroke();
+  if(showGrid){
+    for(let z=0;z<=xMax;z+=4){
+      const gx=iX+(z/xMax)*iW;
+      cx.strokeStyle='rgba(255,255,255,.03)';cx.lineWidth=.5;
+      cx.beginPath();cx.moveTo(gx,iY);cx.lineTo(gx,iY+iH);cx.stroke();
+      txt(z,gx,iY+iH+12,'#2e4060',8.5);
+    }
+    for(let d=0;d<=1;d+=.25){
+      const gy=iY+iH-d*iH;
+      cx.strokeStyle='rgba(255,255,255,.025)';cx.lineWidth=.5;
+      cx.beginPath();cx.moveTo(iX,gy);cx.lineTo(iX+iW,gy);cx.stroke();
+      txt(d.toFixed(2),iX-6,gy,'#2e4060',8,'monospace','right');
+    }
+  }
+  cx.strokeStyle='rgba(40,80,120,.8)';cx.lineWidth=1;
+  cx.beginPath();cx.moveTo(iX,iY);cx.lineTo(iX,iY+iH+4);cx.stroke();
+  cx.beginPath();cx.moveTo(iX,iY+iH);cx.lineTo(iX+iW+4,iY+iH);cx.stroke();
+  txt(label,iX+iW/2,iY+iH+26,'#3a5070',9.5);
+  txt('Rel. Dose',iX-30,iY+iH/2,'#3a5070',9,'monospace','center','middle');
+  if(title) txt(title,iX+4,iY+8,curves[0]?.col||'#38bdf8',10,'Rajdhani,sans-serif','left');
+  if(boneZ!=null){
+    const bxS=iX+(boneZ/xMax)*iW,bxE=iX+((boneZ+boneT)/xMax)*iW;
+    cx.fillStyle='rgba(245,158,11,.07)';cx.fillRect(bxS,iY,bxE-bxS,iH);
+    cx.strokeStyle='rgba(245,158,11,.22)';cx.lineWidth=.8;cx.strokeRect(bxS,iY,bxE-bxS,iH);
+    txt('BONE',(bxS+bxE)/2,iY+10,'rgba(245,158,11,.55)',7.5);
+  }
+  if(gnpZ!=null){
+    const gxS=iX+(gnpZ/xMax)*iW,gxE=iX+((gnpZ+gnpT)/xMax)*iW;
+    cx.fillStyle='rgba(251,191,36,.10)';cx.fillRect(gxS,iY,gxE-gxS,iH);
+    cx.strokeStyle='rgba(251,191,36,.45)';cx.lineWidth=1;cx.setLineDash([4,3]);
+    cx.strokeRect(gxS,iY,gxE-gxS,iH);cx.setLineDash([]);
+    txt('GNP',(gxS+gxE)/2,iY+10,'rgba(251,191,36,.75)',8);
+    txt('GELATIN',(gxS+gxE)/2,iY+20,'rgba(251,191,36,.55)',7);
+  }
+  const ns=Math.floor(N*Math.min(progress,1));
+  curves.forEach(({dd,col,dash=[],lw=2,label:cl,filled=false},ci)=>{
+    if(!dd) return;
+    cx.strokeStyle=col;cx.lineWidth=lw;cx.shadowBlur=6;cx.shadowColor=col+'66';
+    cx.setLineDash(dash);
+    if(filled){
+      cx.beginPath();cx.moveTo(iX,iY+iH);
+      for(let i=0;i<ns;i++) cx.lineTo(iX+(i*DZ/xMax)*iW,iY+iH-dd[i]/DMAX*iH*.9);
+      cx.lineTo(iX+(ns-1)*DZ/xMax*iW,iY+iH);cx.closePath();
+      const [r2,g2,b2]=hexToComponents(col);
+      cx.fillStyle=`rgba(${r2},${g2},${b2},.07)`;cx.fill();
+    }
+    cx.beginPath();
+    for(let i=0;i<ns;i++){
+      const gx=iX+(i*DZ/xMax)*iW;
+      const gy=iY+iH-dd[i]/DMAX*iH*.9;
+      if(i===0) cx.moveTo(gx,gy);else cx.lineTo(gx,gy);
+    }
+    cx.stroke();cx.shadowBlur=0;cx.setLineDash([]);
+    if(cl){
+      const ly=iY+12+ci*17;
+      cx.strokeStyle=col;cx.lineWidth=lw;cx.setLineDash(dash);
+      cx.beginPath();cx.moveTo(iX+iW-108,ly);cx.lineTo(iX+iW-80,ly);cx.stroke();
+      cx.setLineDash([]);
+      txt(cl,iX+iW-76,ly,col,9,'Rajdhani,sans-serif','left');
+    }
+  });
+  curves.forEach(({dd,col})=>{
+    if(!dd||progress<.82) return;
+    const ma=Math.min((progress-.82)/.18,1);
+    const pz=peakZ(dd),px2=iX+(pz/xMax)*iW;
+    cx.save();cx.globalAlpha=ma*.5;
+    cx.strokeStyle=col;cx.lineWidth=.8;cx.setLineDash([3,4]);
+    cx.beginPath();cx.moveTo(px2,iY);cx.lineTo(px2,iY+iH);cx.stroke();
+    cx.setLineDash([]);cx.restore();
+    if(progress>=1){
+      const [r2,g2,b2]=hexToComponents(col);
+      rr(px2-28,iY-16,56,14,4);
+      cx.fillStyle=`rgba(${r2},${g2},${b2},.16)`;cx.fill();
+      cx.strokeStyle=col;cx.lineWidth=.7;cx.stroke();
+      txt(`${pz.toFixed(1)}cm`,px2,iY-9,col,8.5);
+    }
+  });
+  cx.restore();
+}
+
+function drawGNPGelatin(x,y,w,h,t,a=1){
+  cx.save();cx.globalAlpha=a;
+  const bg=cx.createLinearGradient(x,y,x+w,y+h);
+  bg.addColorStop(0,'rgba(161,122,0,.28)');
+  bg.addColorStop(.45,'rgba(251,191,36,.40)');
+  bg.addColorStop(1,'rgba(161,122,0,.22)');
+  rr(x,y,w,h,8);cx.fillStyle=bg;cx.fill();
+  cx.strokeStyle='rgba(251,191,36,.85)';cx.lineWidth=2.2;cx.stroke();
+  for(let f=0;f<6;f++){
+    cx.strokeStyle=`rgba(255,220,50,${.05+f*.008})`;cx.lineWidth=0.7;
+    cx.beginPath();cx.moveTo(x,y+h*.12+f*(h*.14));
+    for(let xx=x;xx<x+w;xx+=5)
+      cx.lineTo(xx,y+h*.12+f*(h*.14)+Math.sin((xx-x)*.07+f*1.3+t*.0015)*2.8);
+    cx.stroke();
+  }
+  for(let i=0;i<90;i++){
+    const px=x+((i*73.13+17.3)%97)/97*w;
+    const py=y+((i*41.71+5.9)%89)/89*h;
+    const r=1.4+((i*31.7)%10)/10*1.6;
+    const pulse=Math.sin(t*0.003+i*0.9)*0.25+0.75;
+    cx.beginPath();cx.arc(px,py,r,0,Math.PI*2);
+    cx.fillStyle=`rgba(255,215,0,${pulse*0.92})`;cx.fill();
+    cx.strokeStyle='rgba(255,180,0,.5)';cx.lineWidth=0.5;cx.stroke();
+    const grd=cx.createRadialGradient(px,py,0,px,py,r*4.5);
+    grd.addColorStop(0,`rgba(255,210,60,${pulse*0.28})`);
+    grd.addColorStop(1,'rgba(0,0,0,0)');
+    cx.beginPath();cx.arc(px,py,r*4.5,0,Math.PI*2);
+    cx.fillStyle=grd;cx.fill();
+    if(i%7===0){
+      const br=Math.sin(t*.004+i)*0.5+0.5;
+      cx.beginPath();cx.arc(px,py,r*.45,0,Math.PI*2);
+      cx.fillStyle=`rgba(255,255,200,${br*.9})`;cx.fill();
+    }
+  }
+  txt('Au GNP GELATIN',x+w/2,y-18,'#fbbf24',10,'Rajdhani,sans-serif');
+  txt(`Z=79 · ${GNP_CONC_MG} mg/mL · ρ=19.3 g/cm³`,x+w/2,y+h+16,'#a08000',8.5);
+  cx.restore();
+}
+
+function drawCyclotron(x,y,r,t,a=1){
+  cx.save();cx.globalAlpha=a;
+  for(let k=0;k<3;k++){
+    cx.beginPath();cx.arc(x,y,r-k*4,0,Math.PI*2);
+    cx.strokeStyle=`rgba(0,212,255,${0.6-k*.18})`;cx.lineWidth=2-k*.4;cx.stroke();
+  }
+  cx.save();cx.translate(x,y);cx.rotate(t*.6);
+  cx.fillStyle='rgba(0,212,255,.12)';cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=1.5;
+  cx.beginPath();cx.arc(0,0,r*.6,0,Math.PI);cx.fill();cx.stroke();
+  cx.fillStyle='rgba(167,139,250,.12)';cx.strokeStyle='rgba(167,139,250,.5)';
+  cx.beginPath();cx.arc(0,0,r*.6,Math.PI,Math.PI*2);cx.fill();cx.stroke();
+  cx.restore();
+  for(let k=0;k<6;k++){
+    const ang=t*.4+k*Math.PI/3;
+    const mx=x+Math.cos(ang)*(r*.82),my=y+Math.sin(ang)*(r*.82);
+    cx.beginPath();cx.arc(mx,my,4,0,Math.PI*2);
+    cx.fillStyle=`rgba(0,212,255,${.5+Math.sin(ang)*.3})`;cx.fill();
+  }
+  radialGlow(x,y,r*.25,'rgba(0,212,255,.2)');
+  cx.beginPath();cx.arc(x,y,r*.12,0,Math.PI*2);cx.fillStyle='rgba(0,212,255,.4)';cx.fill();
+  txt('CYCLOTRON',x,y+r+14,'#00d4ff',10);
+  txt(E_INIT+' MeV',x,y+r+26,'#38bdf8',9);
+  cx.restore();
+}
+
+function drawDegrader(x,y,w,h,a=1){
+  cx.save();cx.globalAlpha=a;
+  const mat=MATERIALS[CURRENT_MAT];
+  const col=mat.color;
+  const [r2,g2,b2]=hexToComponents(col);
+  const dg=cx.createLinearGradient(x,y,x+w,y+h);
+  dg.addColorStop(0,`rgba(${r2},${g2},${b2},.35)`);
+  dg.addColorStop(.5,`rgba(${r2},${g2},${b2},.22)`);
+  dg.addColorStop(1,`rgba(${r2},${g2},${b2},.15)`);
+  rr(x,y,w,h,6);cx.fillStyle=dg;cx.fill();
+  cx.strokeStyle=col;cx.lineWidth=1.8;cx.stroke();
+  for(let i=0;i<10;i++){
+    const ty=y+i*(h/10);
+    cx.strokeStyle=`rgba(${r2},${g2},${b2},.12)`;cx.lineWidth=.5;
+    cx.beginPath();cx.moveTo(x,ty);cx.lineTo(x+w,ty);cx.stroke();
+  }
+  cx.save();cx.translate(x+w/2,y+h/2);cx.rotate(-Math.PI/2);
+  txt(mat.name.toUpperCase(),0,-6,col,8.5);
+  txt(`${DEGRAD_THICK.toFixed(2)} cm`,0,6,'#fff',8);
+  cx.restore();cx.restore();
+}
+
+function drawTOFScint(x,y,w,h,label,a=1){
+  cx.save();cx.globalAlpha=a;
+  const g=cx.createLinearGradient(x,y,x+w,y+h);
+  g.addColorStop(0,'rgba(0,255,180,.22)');g.addColorStop(.5,'rgba(0,200,140,.32)');g.addColorStop(1,'rgba(0,255,180,.12)');
+  rr(x,y,w,h,4);cx.fillStyle=g;cx.fill();
+  cx.strokeStyle='rgba(0,255,180,.8)';cx.lineWidth=2;cx.stroke();
+  cx.save();cx.translate(x+w/2,y-13);cx.rotate(-Math.PI/2);
+  txt(label,0,0,'#00ffb4',9.5);cx.restore();cx.restore();
+}
+
+function drawDegraderMaterialPanel(x,y,w,h,mat,thick,loss,highlighted,a=1){
+  const m=MATERIALS[mat];
+  cx.save();cx.globalAlpha=a;
+  const [r2,g2,b2]=hexToComponents(m.color);
+  rr(x,y,w,h,8);
+  cx.fillStyle=highlighted?`rgba(${r2},${g2},${b2},.14)`:'rgba(2,6,20,.92)';cx.fill();
+  cx.strokeStyle=highlighted?m.color:`rgba(${r2},${g2},${b2},.35)`;
+  cx.lineWidth=highlighted?2:1;cx.stroke();
+  txt(mat==='C'?'CARBON (C)':'ALUMINIUM (Al)',x+w/2,y+18,m.color,11,'Rajdhani,sans-serif');
+  txt(`Z = ${m.Z}  A = ${m.A}`,x+w/2,y+32,m.color+'88',8.5);
+  txt(`ρ = ${m.rho} g/cm³`,x+w/2,y+50,'#ccdde8',10,'Rajdhani,sans-serif');
+  txt(`SP = ${m.sp_mass} MeV·cm²/g`,x+w/2,y+65,'#ccdde8',10,'Rajdhani,sans-serif');
+  txt(`dE/dx = ${(m.sp_mass*m.rho).toFixed(2)} MeV/cm`,x+w/2,y+80,'#fbbf24',10,"'Share Tech Mono',monospace");
+  const lineY=y+94;
+  cx.strokeStyle=`rgba(${r2},${g2},${b2},.3)`;cx.lineWidth=.6;
+  cx.beginPath();cx.moveTo(x+14,lineY);cx.lineTo(x+w-14,lineY);cx.stroke();
+  txt(`Loss: ${loss} MeV`,x+w/2,y+108,'#f87171',10,"'Share Tech Mono',monospace");
+  txt(`Thickness:`,x+w/2,y+122,'#94a3b8',9,"'Share Tech Mono',monospace");
+  txt(`${thick.toFixed(3)} cm`,x+w/2,y+138,m.color,13,"'Orbitron',monospace");
+  txt('(NIST PSTAR)',x+w/2,y+152,'#3a5070',8.5);
+  if(highlighted){
+    rr(x+w-22,y+4,18,16,4);
+    cx.fillStyle=`rgba(${r2},${g2},${b2},.25)`;cx.fill();
+    cx.strokeStyle=m.color;cx.lineWidth=.8;cx.stroke();
+    txt('✓',x+w-13,y+12,m.color,11);
+  }
+  cx.restore();
+}
+
+function drawDWC(x,y,w,h,beamSigmaMm,a=1){
+  cx.save();cx.globalAlpha=a;
+  rr(x,y,w,h,8);
+  cx.fillStyle='rgba(2,8,28,.94)';cx.fill();
+  cx.strokeStyle='rgba(96,165,250,.5)';cx.lineWidth=1.5;cx.stroke();
+  const nw=14,stepX=w/nw,stepY=h/nw;
+  for(let i=0;i<=nw;i++){
+    const alpha2=i%3===0?.28:.09;
+    cx.strokeStyle=`rgba(96,165,250,${alpha2})`;cx.lineWidth=i%3===0?.7:.3;
+    cx.beginPath();cx.moveTo(x+i*stepX,y+5);cx.lineTo(x+i*stepX,y+h-5);cx.stroke();
+    cx.beginPath();cx.moveTo(x+5,y+i*stepY);cx.lineTo(x+w-5,y+i*stepY);cx.stroke();
+  }
+  const bX=x+w/2,bY=y+h/2;
+  const sigPx=beamSigmaMm*(w/50);
+  for(let ri=Math.ceil(sigPx*2.5);ri>0;ri-=1){
+    const grd=cx.createRadialGradient(bX,bY,0,bX,bY,ri);
+    const alpha2=Math.exp(-ri*ri/(2*sigPx*sigPx))*.55;
+    grd.addColorStop(0,`rgba(0,212,255,${alpha2})`);
+    grd.addColorStop(1,'rgba(0,0,0,0)');
+    cx.beginPath();cx.arc(bX,bY,ri,0,Math.PI*2);cx.fillStyle=grd;cx.fill();
+  }
+  for(let row=-6;row<=6;row++){
+    const wy=bY+row*stepY;
+    if(wy<y+5||wy>y+h-5) continue;
+    const dose=Math.exp(-row*row*stepY*stepY/(2*sigPx*sigPx));
+    if(dose<0.04) continue;
+    const hitR=Math.max(1.5,dose*5.5);
+    cx.beginPath();cx.arc(bX,wy,hitR,0,Math.PI*2);
+    cx.fillStyle=`rgba(0,212,255,${dose*.85})`;cx.fill();
+    cx.beginPath();cx.arc(bX,wy,Math.max(.5,hitR*.4),0,Math.PI*2);
+    cx.fillStyle=`rgba(200,240,255,${dose*.9})`;cx.fill();
+  }
+  for(let col2=-6;col2<=6;col2++){
+    const wx=bX+col2*stepX;
+    if(wx<x+5||wx>x+w-5) continue;
+    const dose=Math.exp(-col2*col2*stepX*stepX/(2*sigPx*sigPx));
+    if(dose<0.04) continue;
+    const hitR=Math.max(1.5,dose*5.5);
+    cx.beginPath();cx.arc(wx,bY,hitR,0,Math.PI*2);
+    cx.fillStyle=`rgba(0,212,255,${dose*.5})`;cx.fill();
+  }
+  txt('DRIFT WIRE CHAMBER',x+w/2,y-16,'#60a5fa',10);
+  txt(`σ = ${beamSigmaMm.toFixed(1)} mm`,x+w/2,y+h+14,'#60a5fa',10.5,"'Orbitron',monospace");
+  cx.restore();
+}
+
+function drawQuadMagnet(x,y,r,a=1){
+  cx.save();cx.globalAlpha=a;
+  cx.strokeStyle='rgba(96,165,250,.5)';cx.lineWidth=2;
+  cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.stroke();
+  cx.fillStyle='rgba(0,20,50,.6)';cx.fill();
+  const poles=[[Math.PI/4,'#f87171','N'],[3*Math.PI/4,'#60a5fa','S'],[5*Math.PI/4,'#f87171','N'],[7*Math.PI/4,'#60a5fa','S']];
+  poles.forEach(([ang,col,lbl])=>{
+    const px=x+Math.cos(ang)*r*.68,py=y+Math.sin(ang)*r*.68;
+    cx.beginPath();cx.arc(px,py,r*.26,0,Math.PI*2);
+    const [r2,g2,b2]=hexToComponents(col);
+    cx.fillStyle=`rgba(${r2},${g2},${b2},.25)`;cx.fill();
+    cx.strokeStyle=col+'cc';cx.lineWidth=1.5;cx.stroke();
+    txt(lbl,px,py,col,9.5);
+    cx.strokeStyle=col+'44';cx.lineWidth=.8;
+    cx.beginPath();cx.moveTo(px,py);cx.lineTo(x+Math.cos(ang)*r*.2,y+Math.sin(ang)*r*.2);cx.stroke();
+  });
+  cx.strokeStyle='rgba(0,212,255,.6)';cx.lineWidth=1.5;
+  cx.beginPath();cx.arc(x,y,r*.22,0,Math.PI*2);cx.stroke();
+  cx.fillStyle='rgba(0,212,255,.1)';cx.fill();
+  radialGlow(x,y,r*.15,'rgba(0,212,255,.25)');
+  txt('QUAD',x,y+r+13,'#6090b0',8.5);
+  cx.restore();
+}
+
+function drawCollimator(x,y,w,h,apertureH,a=1){
+  cx.save();cx.globalAlpha=a;
+  const topH=(h-apertureH)/2;
+  const cg=cx.createLinearGradient(x,y,x+w,y);
+  cg.addColorStop(0,'rgba(100,120,160,.5)');cg.addColorStop(1,'rgba(60,80,120,.35)');
+  cx.fillStyle=cg;
+  rr(x,y,w,topH,4);cx.fill();cx.strokeStyle='rgba(150,180,220,.6)';cx.lineWidth=1.5;cx.stroke();
+  rr(x,y+topH+apertureH,w,topH,4);cx.fill();cx.stroke();
+  radialGlow(x+w/2,y+topH+apertureH/2,apertureH*.8,'rgba(0,212,255,.08)');
+  txt('COLLIMATOR',x+w/2,y+h+14,'#94b8d4',9);
+  cx.restore();
+}
+
+function drawMuscleJelly(x,y,w,h,a=1,label='MUSCLE JELLY PHANTOM (ρ=1.06 g/cm³)'){
+  cx.save();cx.globalAlpha=a;
+  const wg=cx.createLinearGradient(x,y,x+w,y+h);
+  wg.addColorStop(0,'rgba(30,110,60,.15)');wg.addColorStop(.5,'rgba(50,180,90,.2)');wg.addColorStop(1,'rgba(20,100,50,.12)');
+  rr(x,y,w,h,10);cx.fillStyle=wg;cx.fill();
+  cx.strokeStyle='rgba(60,200,100,.45)';cx.lineWidth=2;cx.stroke();
+  for(let f=0;f<6;f++){
+    cx.strokeStyle=`rgba(0,160,80,${.04-f*.005})`;cx.lineWidth=1.2;
+    cx.beginPath();cx.moveTo(x,y+h*.15+f*(h*.12));
+    for(let xx=x;xx<x+w;xx+=8) cx.lineTo(xx,y+h*.15+f*(h*.12)+Math.sin((xx-x)*.04+f)*3);
+    cx.stroke();
+  }
+  txt(label,x+w/2,y-14,'rgba(60,210,100,.7)',9.5);
+  cx.restore();
+}
+
+function drawFinalScintillator(x,y,w,h,beamY,a=1,t=0){
+  cx.save();cx.globalAlpha=a;
+  const sg=cx.createLinearGradient(x,y,x+w,y+h);
+  sg.addColorStop(0,'rgba(251,191,36,.18)');sg.addColorStop(.5,'rgba(245,158,11,.28)');sg.addColorStop(1,'rgba(251,191,36,.14)');
+  rr(x,y,w,h,5);cx.fillStyle=sg;cx.fill();
+  cx.strokeStyle='rgba(251,191,36,.7)';cx.lineWidth=2;cx.stroke();
+  const g2=cx.createRadialGradient(x+w/2,beamY,0,x+w/2,beamY,w*1.5);
+  g2.addColorStop(0,`rgba(251,191,36,${.22+Math.sin(t*.004)*.07})`);
+  g2.addColorStop(1,'rgba(0,0,0,0)');
+  cx.beginPath();cx.arc(x+w/2,beamY,w*1.5,0,Math.PI*2);cx.fillStyle=g2;cx.fill();
+  txt('DOSE SCINT.',x+w/2,y-16,'#fbbf24',9.5);
+  cx.restore();
+}
+
+function drawBoneSlab(cx2,x,y,w,h,angle=0,a=1){
+  cx2.save();cx2.globalAlpha=a;
+  cx2.translate(x+w/2,y+h/2);cx2.rotate(angle*Math.PI/180);
+  const bg=cx2.createLinearGradient(-w/2,-h/2,w/2,h/2);
+  bg.addColorStop(0,'rgba(245,158,11,.4)');bg.addColorStop(.5,'rgba(251,191,36,.28)');bg.addColorStop(1,'rgba(245,158,11,.2)');
+  cx2.fillStyle=bg;cx2.beginPath();cx2.rect(-w/2,-h/2,w,h);cx2.fill();
+  cx2.strokeStyle='rgba(245,158,11,.75)';cx2.lineWidth=2;cx2.stroke();
+  cx2.fillStyle='rgba(245,158,11,.8)';cx2.font="bold 9px 'Share Tech Mono'";
+  cx2.textAlign='center';cx2.textBaseline='middle';
+  cx2.fillText(`BONE  SPR=${SPR_BONE}`,0,0);
+  cx2.restore();
+}
+
+function drawTOFHistogram(x,y,w,h,a,prog){
+  cx.save();cx.globalAlpha=a;
+  rr(x,y,w,h,9);cx.fillStyle='rgba(2,6,20,.94)';cx.fill();
+  cx.strokeStyle='rgba(0,255,180,.2)';cx.lineWidth=1.2;cx.stroke();
+  txt('TOF TIMING HISTOGRAM',x+w/2,y+12,'#00ffb4',10);
+  const iX=x+44,iY=y+34,iW=w-58,iH=h-54;
+  const tD=TOF_DATA;
+  const tMin=tD.tKaon-2,tMax=tD.tBoron+2.5,tRange=tMax-tMin;
+  cx.strokeStyle='rgba(40,80,120,.8)';cx.lineWidth=1;
+  cx.beginPath();cx.moveTo(iX,iY);cx.lineTo(iX,iY+iH+4);cx.stroke();
+  cx.beginPath();cx.moveTo(iX,iY+iH);cx.lineTo(iX+iW+4,iY+iH);cx.stroke();
+  for(let t2=Math.ceil(tMin);t2<=tMax;t2+=2){
+    const gx=iX+(t2-tMin)/tRange*iW;
+    cx.strokeStyle='rgba(255,255,255,.04)';cx.lineWidth=.4;
+    cx.beginPath();cx.moveTo(gx,iY);cx.lineTo(gx,iY+iH);cx.stroke();
+    txt(t2.toFixed(0),gx,iY+iH+11,'#2a4a6a',8.5);
+  }
+  txt('TOF (ns)',iX+iW/2,iY+iH+24,'#3a5070',9);
+  const gX1=iX+(tD.tProton-1.2-tMin)/tRange*iW;
+  const gX2=iX+(tD.tProton+1.2-tMin)/tRange*iW;
+  cx.fillStyle='rgba(0,255,170,.07)';cx.fillRect(gX1,iY,gX2-gX1,iH);
+  cx.strokeStyle='rgba(0,255,170,.5)';cx.lineWidth=1;cx.setLineDash([3,3]);
+  cx.beginPath();cx.moveTo(gX1,iY);cx.lineTo(gX1,iY+iH);cx.stroke();
+  cx.beginPath();cx.moveTo(gX2,iY);cx.lineTo(gX2,iY+iH);cx.stroke();
+  cx.setLineDash([]);
+  txt('TOF GATE',(gX1+gX2)/2,iY+7,'#00ffaa',8);
+  const peaks=[
+    {t:tD.tKaon,col:'#f97316',lbl:'K⁺ ion',sig:0.38,ht:0.55,accepted:false},
+    {t:tD.tProton,col:'#00d4ff',lbl:'Proton p',sig:0.48,ht:1.0,accepted:true},
+    {t:tD.tBoron,col:'#c084fc',lbl:'¹⁰B⁵⁺',sig:0.75,ht:0.28,accepted:false},
+  ];
+  peaks.forEach(pk=>{
+    const dp=Math.max(0,Math.min(prog,1));
+    cx.strokeStyle=pk.col;cx.lineWidth=pk.accepted?2.5:1.8;
+    cx.shadowBlur=pk.accepted?8:4;cx.shadowColor=pk.col;
+    cx.beginPath();let first=true;
+    for(let i=0;i<=400;i++){
+      const ti=tMin+i/400*tRange;
+      const v=pk.ht*Math.exp(-(ti-pk.t)*(ti-pk.t)/(2*pk.sig*pk.sig));
+      if(v<0.005) continue;
+      const gx=iX+(ti-tMin)/tRange*iW;
+      const gy=iY+iH-v*iH*.85*dp;
+      if(first){cx.moveTo(gx,gy);first=false;}else cx.lineTo(gx,gy);
+    }
+    cx.stroke();cx.shadowBlur=0;
+    const [r2,g2,b2]=hexToComponents(pk.col);
+    cx.beginPath();first=true;
+    for(let i=0;i<=400;i++){
+      const ti=tMin+i/400*tRange;
+      const v=pk.ht*Math.exp(-(ti-pk.t)*(ti-pk.t)/(2*pk.sig*pk.sig));
+      if(v<0.005) continue;
+      const gx=iX+(ti-tMin)/tRange*iW;
+      const gy=iY+iH-v*iH*.85*dp;
+      if(first){cx.moveTo(gx,gy);first=false;}else cx.lineTo(gx,gy);
+    }
+    cx.lineTo(iX+(pk.t+3.2*pk.sig-tMin)/tRange*iW,iY+iH);
+    cx.closePath();cx.fillStyle=`rgba(${r2},${g2},${b2},0.09)`;cx.fill();
+    const pkX=iX+(pk.t-tMin)/tRange*iW;
+    const peakY=iY+iH-pk.ht*iH*.85*dp;
+    txt(pk.lbl,pkX,peakY-16,pk.col,9,'Rajdhani,sans-serif');
+    txt(`${pk.t.toFixed(2)} ns`,pkX,peakY-5,pk.col+'88',8.5);
+    if(!pk.accepted&&dp>0.6){
+      const ra=Math.min((dp-0.6)/0.4,1);
+      cx.save();cx.globalAlpha=ra*.8;
+      rr(pkX-22,iY+iH*.12,44,16,4);
+      cx.fillStyle='rgba(248,113,113,.12)';cx.fill();cx.strokeStyle='rgba(248,113,113,.4)';cx.lineWidth=.7;cx.stroke();
+      txt('✗ REJECT',pkX,iY+iH*.12+8,'#f87171',8.5);cx.restore();
+    }
+    if(pk.accepted&&dp>0.7){
+      const ra=Math.min((dp-0.7)/0.3,1);
+      cx.save();cx.globalAlpha=ra;
+      rr(pkX-26,iY+iH*.08,52,16,4);
+      cx.fillStyle='rgba(0,255,170,.1)';cx.fill();cx.strokeStyle='rgba(0,255,170,.4)';cx.lineWidth=.7;cx.stroke();
+      txt('✓ ACCEPT',pkX,iY+iH*.08+8,'#00ffaa',8.5);cx.restore();
+    }
+  });
+  if(prog>0.7){
+    const ta=Math.min((prog-0.7)/0.3,1);
+    cx.save();cx.globalAlpha=ta;
+    const kX=iX+(tD.tKaon-tMin)/tRange*iW;
+    const pX=iX+(tD.tProton-tMin)/tRange*iW;
+    const bX2=iX+(tD.tBoron-tMin)/tRange*iW;
+    const arY=iY+iH*.35;
+    arrow(kX,arY,pX,arY,'#fbbf24',1.3);
+    txt(`${tD.dtPK.toFixed(2)} ns`,(kX+pX)/2,arY-9,'#fbbf24',8.5);
+    arrow(pX,arY-18,bX2,arY-18,'#fbbf24',1.3);
+    txt(`${tD.dtBP.toFixed(2)} ns`,(pX+bX2)/2,arY-27,'#fbbf24',8.5);
+    cx.restore();
+  }
+  cx.restore();
+}
+
+function s0(t){
+  const a=Math.min(t/800,1);
+  const cY=H*.44;
+  const cycX=W*.06,cycR=42;
+  const degX=W*.155,degW=22,degH=115;
+  const tof1X=W*.255,tofW=11,tofH=145;
+  const tof2X=W*.385;
+  const colX=W*.475,colW=18,colH=148,colAp=26;
+  const dwcX=W*.525,dwcW=50,dwcH=80;
+  const quadX=W*.61,quadR=28;
+  const phX=W*.66,phW=W*.195,phH=155;
+  const scFX=W*.88,scFW=12,scFH=165;
+  const tof2Stop=tof2X+tofW+4;
+  radialGlow(W/2,cY,W*.6,'rgba(0,20,60,.4)');
+  drawCyclotron(cycX,cY,cycR,t,Math.min(t/700,1)*a);
+  if(t>250){
+    const ba=Math.min((t-250)/500,1)*a;
+    cx.save();cx.globalAlpha=ba;
+    [{off:-9,col:'#00d4ff'},{off:-3,col:'#f97316'},{off:3,col:'#c084fc'},{off:9,col:'#00d4ff'}].forEach(({off,col})=>{
+      cx.strokeStyle=col;cx.lineWidth=1.8;
+      cx.beginPath();cx.moveTo(cycX+cycR+4,cY+off);cx.lineTo(degX,cY+off);cx.stroke();
+    });
+    txt('MIXED BEAM',(cycX+cycR+degX)/2,cY-36,'#f97316',10);
+    txt('p + K⁺ + ¹⁰B⁵⁺',(cycX+cycR+degX)/2,cY-24,'#7a5a30',9);
+    cx.restore();
+  }
+  if(t>480){const da=Math.min((t-480)/500,1)*a;drawDegrader(degX,cY-degH/2,degW,degH,da);}
+  if(t>720){
+    const ba=Math.min((t-720)/400,1)*a;
+    cx.save();cx.globalAlpha=ba;
+    [{off:-8,col:'#00d4ff'},{off:-2.5,col:'#f97316'},{off:2.5,col:'#c084fc'},{off:8,col:'#00d4ff'}].forEach(({off,col})=>{
+      cx.strokeStyle=col;cx.lineWidth=1.5;
+      cx.beginPath();cx.moveTo(degX+degW,cY+off);cx.lineTo(tof1X,cY+off);cx.stroke();
+    });
+    cx.restore();
+  }
+  if(t>900) drawTOFScint(tof1X,cY-tofH/2,tofW,tofH,'TOF-S1',Math.min((t-900)/400,1)*a);
+  if(t>1050){
+    const ba=Math.min((t-1050)/400,1)*a;
+    cx.save();cx.globalAlpha=ba;cx.setLineDash([2,4]);
+    [{off:-8,col:'#00d4ff'},{off:-2.5,col:'#f97316'},{off:2.5,col:'#c084fc'},{off:8,col:'#00d4ff'}].forEach(({off,col})=>{
+      cx.strokeStyle=col;cx.lineWidth=1.4;
+      cx.beginPath();cx.moveTo(tof1X+tofW,cY+off);cx.lineTo(tof2X,cY+off);cx.stroke();
+    });
+    cx.setLineDash([]);
+    const midTOF=(tof1X+tofW+tof2X)/2;
+    txt(`L=${TOF_L}cm`,midTOF,cY-9,'#0a9a70',8.5);
+    cx.restore();
+  }
+  if(t>1100) drawTOFScint(tof2X,cY-tofH/2,tofW,tofH,'TOF-S2',Math.min((t-1100)/400,1)*a);
+  if(t>1500){
+    const ba=Math.min((t-1500)/400,1)*a;
+    cx.save();cx.globalAlpha=ba;
+    cx.strokeStyle='#00d4ff';cx.lineWidth=1.8;
+    cx.beginPath();cx.moveTo(tof2X+tofW,cY);cx.lineTo(colX,cY);cx.stroke();
+    cx.restore();
+  }
+  if(t>1650) drawCollimator(colX,cY-colH/2,colW,colH,colAp,Math.min((t-1650)/500,1)*a);
+  if(t>1800){
+    const da=Math.min((t-1800)/500,1)*a;
+    drawDWC(dwcX,cY-dwcH/2,dwcW,dwcH,2.0,da);
+    cx.save();cx.globalAlpha=da;
+    cx.strokeStyle='rgba(96,165,250,.5)';cx.lineWidth=1.5;
+    cx.beginPath();cx.moveTo(colX+colW,cY);cx.lineTo(dwcX,cY);cx.stroke();
+    cx.restore();
+  }
+  if(t>1950){
+    const qa=Math.min((t-1950)/500,1)*a;
+    drawQuadMagnet(quadX+quadR,cY,quadR,qa);
+    cx.save();cx.globalAlpha=qa;
+    cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=1.6;
+    cx.beginPath();cx.moveTo(dwcX+dwcW,cY);cx.lineTo(quadX,cY);cx.stroke();
+    cx.beginPath();cx.moveTo(quadX+quadR*2+2,cY);cx.lineTo(phX,cY);cx.stroke();
+    cx.restore();
+  }
+  if(t>2100){const pa=Math.min((t-2100)/600,1)*a;drawMuscleJelly(phX,cY-phH/2,phW,phH,pa);}
+  if(t>2400){
+    const prog=Math.min((t-2400)/2000,1);
+    const pa=Math.min((t-2100)/600,1)*a;
+    cx.save();cx.globalAlpha=pa*prog;
+    const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+    for(let i=0;i<Math.floor(N*prog);i++){
+      const v=DD_W[i]/DMAX;
+      const bx3=phX+(i*DZ/MAXD)*phW;
+      cx.fillStyle=jet(Math.pow(v,iExp));
+      cx.fillRect(bx3,cY-v*(phH*.82)/2,Math.max(1,(DZ/MAXD)*phW),v*(phH*.82));
+    }
+    cx.restore();
+  }
+  if(t>2600) drawFinalScintillator(phX+phW+8,cY-scFH/2,scFW,scFH,cY,Math.min((t-2600)/500,1)*a,t);
+  const spRate=0.04*BEAM_INTENSITY;
+  if(t>250&&Math.random()<spRate) spawnParticle(cycX+cycR+4,cY+(Math.random()-.5)*14,6.5+Math.random(),(Math.random()-.5)*.3,'proton');
+  if(t>250&&Math.random()<spRate*0.3) spawnParticle(cycX+cycR+4,cY+(Math.random()-.5)*14,6.5+Math.random(),(Math.random()-.5)*.3,'kion',tof2Stop);
+  if(t>250&&Math.random()<spRate*0.15) spawnParticle(cycX+cycR+4,cY+(Math.random()-.5)*14,6.5+Math.random(),(Math.random()-.5)*.3,'bion',tof2Stop);
+  if(a>.5){
+    const labels=[
+      {x:cycX,y:cY+cycR+42,t:'① CYCLOTRON '+E_INIT+'MeV',c:'#00d4ff'},
+      {x:degX+degW/2,y:cY+degH/2+20,t:'② C/Al DEGRADER',c:MATERIALS[CURRENT_MAT].color},
+      {x:tof1X+tofW/2,y:cY+tofH/2+20,t:'③ TOF-S1',c:'#00ffb4'},
+      {x:tof2X+tofW/2,y:cY+tofH/2+20,t:'④ TOF-S2',c:'#00ffb4'},
+      {x:colX+colW/2,y:cY+colH/2+20,t:'⑤ COLLIMATOR',c:'#94b8d4'},
+      {x:dwcX+dwcW/2,y:cY+dwcH/2+20,t:'⑥ DWC',c:'#60a5fa'},
+      {x:quadX+quadR,y:cY+quadR+36,t:'⑦ QUAD',c:'#60a5fa'},
+      {x:phX+phW/2,y:cY+phH/2+22,t:'⑧ JELLY',c:'#00ffaa'},
+      {x:scFX+scFW/2,y:cY+scFH/2+22,t:'⑨ SCINT.',c:'#fbbf24'},
+    ];
+    labels.forEach(({x,y,t:lt,c})=>{cx.save();cx.globalAlpha=a;txt(lt,x,y,c,10,'Rajdhani,sans-serif');cx.restore();});
+  }
+  tickParticles(.04,.04);
+}
+
+function s1(t){
+  const a=Math.min(t/700,1);
+  const cY=H*.38;const cX=W*.5;
+  radialGlow(cX,cY,220,'rgba(100,80,200,.05)');
+  cx.save();cx.globalAlpha=a;
+  rr(W*.06,H*.07,W*.88,50,8);
+  cx.fillStyle='rgba(0,4,18,.9)';cx.fill();
+  cx.strokeStyle='rgba(0,212,255,.15)';cx.lineWidth=1;cx.stroke();
+  txt(`CYCLOTRON ENERGY: ${E_INIT} MeV   →   DEGRADER   →   ${E0} MeV to phantom`,cX,H*.07+18,'#00d4ff',11,"'Share Tech Mono',monospace");
+  txt(`Energy loss = ${DEGRADER_LOSS} MeV   |   NIST PSTAR stopping power tables used to determine required thickness`,cX,H*.07+34,'#3a5570',9);
+  cx.restore();
+  if(t>400){
+    const pa=Math.min((t-400)/600,1)*a;
+    const pW=W*.3,pH=165;
+    const cPX=W*.2,alX=W*.52;
+    drawDegraderMaterialPanel(cPX,cY-50,pW,pH,'C',DEGRADER_LOSS/(MATERIALS.C.sp_mass*MATERIALS.C.rho),DEGRADER_LOSS,CURRENT_MAT==='C',pa);
+    drawDegraderMaterialPanel(alX,cY-50,pW,pH,'Al',DEGRADER_LOSS/(MATERIALS.Al.sp_mass*MATERIALS.Al.rho),DEGRADER_LOSS,CURRENT_MAT==='Al',pa);
+    if(pa>0.5){
+      const va=Math.min((pa-0.5)/0.5,1);
+      cx.save();cx.globalAlpha=va;
+      const vsX=W*.49,vsY=cY+30;
+      cx.fillStyle='rgba(0,212,255,.08)';cx.strokeStyle='rgba(0,212,255,.3)';cx.lineWidth=1.2;
+      rr(vsX-36,vsY-14,72,28,6);cx.fill();cx.stroke();
+      txt('vs',vsX,vsY,'#00d4ff',14,"'Orbitron',monospace");
+      cx.restore();
+    }
+  }
+  if(t>1400){
+    const fa=Math.min((t-1400)/700,1)*a;
+    const iY=cY+140;
+    cx.save();cx.globalAlpha=fa;
+    rr(W*.06,iY,W*.88,H*.32,9);
+    cx.fillStyle='rgba(2,6,20,.92)';cx.fill();cx.strokeStyle='rgba(0,212,255,.1)';cx.lineWidth=1;cx.stroke();
+    txt('NIST PSTAR STOPPING POWER — PROTON ENERGY LOSS IN DEGRADER MATERIALS',cX,iY+18,'#00d4ff',10);
+    const matC=MATERIALS.C,matAl=MATERIALS.Al;
+    const colC=matC.color,colAl=matAl.color;
+    const bX=W*.1,bW=W*.8,bH=H*.2,bY=iY+32;
+    const iX=bX+50,iW=bW-60,iH=bH-30;
+    cx.strokeStyle='rgba(40,80,120,.8)';cx.lineWidth=1;
+    cx.beginPath();cx.moveTo(iX,bY);cx.lineTo(iX,bY+iH+4);cx.stroke();
+    cx.beginPath();cx.moveTo(iX,bY+iH);cx.lineTo(iX+iW+4,bY+iH);cx.stroke();
+    txt('Proton Kinetic Energy (MeV)',iX+iW/2,bY+iH+22,'#3a5070',9.5);
+    txt('dE/dx (MeV/cm)',iX-34,bY+iH/2,'#3a5070',9,'monospace','center','middle');
+    const energies=[50,100,150,200,250,270];const Emax=300;
+    energies.forEach(E=>{
+      const gx=iX+(E/Emax)*iW;
+      cx.strokeStyle='rgba(255,255,255,.05)';cx.lineWidth=.4;
+      cx.beginPath();cx.moveTo(gx,bY);cx.lineTo(gx,bY+iH);cx.stroke();
+      txt(E,gx,bY+iH+12,'#2e4060',8.5);
+    });
+    const dxMax=20;
+    for(let d=0;d<=dxMax;d+=5){
+      const gy=bY+iH-d/dxMax*iH;
+      cx.strokeStyle='rgba(255,255,255,.04)';cx.lineWidth=.4;
+      cx.beginPath();cx.moveTo(iX,gy);cx.lineTo(iX+iW,gy);cx.stroke();
+      txt(d,iX-6,gy,'#2e4060',8,'monospace','right');
+    }
+    const spC=E=>matC.sp_mass*matC.rho*(270/E)**.55;
+    const spAl=E=>matAl.sp_mass*matAl.rho*(270/E)**.55;
+    [[spC,colC,'C'],[spAl,colAl,'Al']].forEach(([spFn,col,lbl])=>{
+      const prog2=Math.min((fa-.0)/1.0,1);const nPts=Math.floor(200*prog2);
+      cx.strokeStyle=col;cx.lineWidth=2.5;cx.shadowBlur=6;cx.shadowColor=col+'88';
+      cx.beginPath();
+      for(let i=0;i<nPts;i++){
+        const E=10+i/200*290;const sp=spFn(E);
+        const gx=iX+(E/Emax)*iW;const gy=bY+iH-Math.min(sp/dxMax,1)*iH;
+        if(i===0) cx.moveTo(gx,gy);else cx.lineTo(gx,gy);
+      }
+      cx.stroke();cx.shadowBlur=0;
+      const eNow=E0;const spNow=spFn(eNow);
+      const px2=iX+(eNow/Emax)*iW;const py2=bY+iH-Math.min(spNow/dxMax,1)*iH;
+      cx.beginPath();cx.arc(px2,py2,5,0,Math.PI*2);cx.fillStyle=col;cx.fill();
+      rr(px2+8,py2-12,100,22,4);
+      cx.fillStyle=`rgba(${hexToComponents(col).join(',')},0.12)`;cx.fill();
+      cx.strokeStyle=col;cx.lineWidth=.7;cx.stroke();
+      txt(`${lbl}: ${spFn(eNow).toFixed(1)} MeV/cm`,px2+58,py2-1,col,9,"'Share Tech Mono',monospace");
+    });
+    const epX=iX+(E0/Emax)*iW;
+    cx.strokeStyle='rgba(0,212,255,.4)';cx.lineWidth=1;cx.setLineDash([3,3]);
+    cx.beginPath();cx.moveTo(epX,bY);cx.lineTo(epX,bY+iH);cx.stroke();cx.setLineDash([]);
+    txt(`E = ${E0} MeV`,epX,bY+5,'rgba(0,212,255,.6)',8.5);
+    cx.restore();
+  }
+  if(t>2800){
+    const ra=Math.min((t-2800)/500,1)*a;
+    cx.save();cx.globalAlpha=ra;
+    const matNow=MATERIALS[CURRENT_MAT];
+    rr(W*.3,H*.87,W*.4,38,7);
+    cx.fillStyle='rgba(0,212,255,.07)';cx.fill();cx.strokeStyle='rgba(0,212,255,.3)';cx.lineWidth=1.2;cx.stroke();
+    txt(`SELECTED: ${matNow.name.toUpperCase()}  |  thickness = ${DEGRAD_THICK.toFixed(3)} cm  |  dE/dx = ${(matNow.sp_mass*matNow.rho).toFixed(2)} MeV/cm`,cX,H*.87+19,matNow.color,10.5,"'Share Tech Mono',monospace");
+    cx.restore();
+  }
+  tickParticles(.04,.04);
+}
+
+function s2(t){
+  const a=Math.min(t/600,1);const cY=H*.42;
+  radialGlow(W*.5,cY,200,'rgba(0,80,200,.05)');
+  cx.save();cx.globalAlpha=a;
+  rr(W*.06,H*.07,W*.88,46,8);
+  cx.fillStyle='rgba(0,4,18,.9)';cx.fill();cx.strokeStyle='rgba(96,165,250,.18)';cx.lineWidth=1;cx.stroke();
+  txt('DRIFT WIRE CHAMBER (DWC) — BEAM PROFILE MEASUREMENT',W*.5,H*.07+15,'#60a5fa',11,"'Share Tech Mono',monospace");
+  txt('Objective: focus beam from 5.0 mm → 2.0 mm diameter (pencil beam) using quadrupole magnets',W*.5,H*.07+31,'#2a4a6a',9.5);
+  cx.restore();
+  const stages=[
+    {label:'Pre-Quad\nBeam Entry',sig:5.0,col:'#f87171'},
+    {label:'1st Quad\nFocusing',sig:4.2,col:'#fbbf24'},
+    {label:'Mid-Beam\nProfile',sig:3.5,col:'#f97316'},
+    {label:'2nd Quad\nFocusing',sig:2.8,col:'#60a5fa'},
+    {label:'Post-Quad\nPencil Beam',sig:2.0,col:'#00ffaa'},
+  ];
+  const nStages=stages.length;
+  const panelW=120,panelH=120,spacing=(W*.85)/(nStages+1);
+  stages.forEach((st,i)=>{
+    const px=W*.08+i*spacing+spacing*.5;const py=cY-panelH/2;
+    const stageA=Math.min(Math.max((t-300-i*400)/600,0),1)*a;
+    if(stageA<=0) return;
+    drawDWC(px,py,panelW,panelH,st.sig,stageA);
+    cx.save();cx.globalAlpha=stageA;
+    const lblLines=st.label.split('\n');
+    lblLines.forEach((ln,li)=>txt(ln,px+panelW/2,py+panelH+26+li*13,st.col,9,'Rajdhani,sans-serif'));
+    cx.restore();
+  });
+  if(t>2600){
+    const fa=Math.min((t-2600)/700,1)*a;
+    const chX=W*.06,chY=cY+100,chW=W*.88,chH=H*.25;
+    cx.save();cx.globalAlpha=fa;
+    rr(chX,chY,chW,chH,9);cx.fillStyle='rgba(2,6,20,.94)';cx.fill();
+    cx.strokeStyle='rgba(96,165,250,.2)';cx.lineWidth=1;cx.stroke();
+    txt('BEAM PROFILE EVOLUTION — 1D Gaussian Cross-Section',chX+chW/2,chY+14,'#60a5fa',10);
+    const bX2=chX+50,bY2=chY+28,bW2=chW-64,bH2=chH-44;
+    cx.strokeStyle='rgba(40,80,120,.7)';cx.lineWidth=1;
+    cx.beginPath();cx.moveTo(bX2,bY2);cx.lineTo(bX2,bY2+bH2+4);cx.stroke();
+    cx.beginPath();cx.moveTo(bX2,bY2+bH2);cx.lineTo(bX2+bW2+4,bY2+bH2);cx.stroke();
+    txt('Position (mm)',bX2+bW2/2,bY2+bH2+20,'#3a5070',9.5);
+    txt('Intensity',bX2-28,bY2+bH2/2,'#3a5070',9,'monospace','center','middle');
+    const xRange=14;
+    for(let x2=-xRange;x2<=xRange;x2+=2){
+      const gx=bX2+(x2+xRange)/(2*xRange)*bW2;txt(x2,gx,bY2+bH2+10,'#2e4060',8.5);
+    }
+    stages.forEach((st)=>{
+      cx.strokeStyle=st.col;cx.lineWidth=st.sig===2.0?2.5:1.6;
+      cx.shadowBlur=st.sig===2.0?8:3;cx.shadowColor=st.col+'66';
+      cx.beginPath();let first=true;
+      for(let xi=-xRange;xi<=xRange;xi+=.1){
+        const v=Math.exp(-xi*xi/(2*st.sig*st.sig));if(v<0.005) continue;
+        const gx=bX2+(xi+xRange)/(2*xRange)*bW2;const gy=bY2+bH2-v*bH2*.9;
+        if(first){cx.moveTo(gx,gy);first=false;}else cx.lineTo(gx,gy);
+      }
+      cx.stroke();cx.shadowBlur=0;
+    });
+    cx.restore();
+  }
+  document.getElementById('m4').innerHTML=`2.0<span class="met-u">mm (final)</span>`;
+  tickParticles(.04,.03);
+}
+
+function s3(t){
+  const a=Math.min(t/600,1);const cY=H*.38;
+  const s1X=W*.1,tofW=12,tofH=200;const s2X=W*.48;const tof2Stop=s2X+tofW+6;
+  cx.save();cx.globalAlpha=a;
+  rr(s1X-55,cY-70,110,140,9);cx.fillStyle='rgba(0,212,255,.05)';cx.fill();cx.strokeStyle='rgba(0,212,255,.3)';cx.lineWidth=1.5;cx.stroke();
+  txt('MIXED BEAM',s1X-3,cY-14,'#f97316',10);txt(`${E0} MeV`,s1X-3,cY+2,'#00d4ff',13,"'Orbitron',monospace");
+  txt('p + K⁺ + ¹⁰B⁵⁺',s1X-3,cY+18,'#7a5a30',9);cx.restore();
+  if(t>200){
+    const ba=Math.min((t-200)/400,1)*a;cx.save();cx.globalAlpha=ba;
+    [{off:-10,col:'#00d4ff'},{off:-4,col:'#f97316'},{off:4,col:'#c084fc'},{off:10,col:'#00d4ff'}].forEach(({off,col})=>{
+      cx.strokeStyle=col;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(s1X+56,cY+off);cx.lineTo(s1X+tofW+8,cY+off);cx.stroke();
+    });cx.restore();
+  }
+  if(t>400) drawTOFScint(s1X+tofW+8,cY-tofH/2,tofW,tofH,'TOF-S1  (START)',Math.min((t-400)/400,1)*a);
+  if(t>700){
+    const ba=Math.min((t-700)/400,1)*a;cx.save();cx.globalAlpha=ba;cx.setLineDash([3,5]);
+    const tX1=s1X+tofW*2+12,tX2=s2X;
+    [{off:-10,col:'#00d4ff'},{off:-4,col:'#f97316'},{off:4,col:'#c084fc'},{off:10,col:'#00d4ff'}].forEach(({off,col})=>{
+      cx.strokeStyle=col;cx.lineWidth=1.4;cx.beginPath();cx.moveTo(tX1,cY+off);cx.lineTo(tX2,cY+off);cx.stroke();
+    });
+    cx.setLineDash([]);
+    const midX=(tX1+tX2)/2;
+    rr(midX-52,cY-28,104,20,5);cx.fillStyle='rgba(0,0,0,.7)';cx.fill();cx.strokeStyle='rgba(0,255,180,.2)';cx.lineWidth=.8;cx.stroke();
+    txt(`Flight path  L = ${TOF_L} cm`,midX,cY-18,'#00a070',9.5);cx.restore();
+  }
+  if(t>900) drawTOFScint(s2X,cY-tofH/2,tofW,tofH,'TOF-S2  (STOP / DISCRIMINATOR)',Math.min((t-900)/400,1)*a);
+  if(t>1300){
+    const pa=Math.min((t-1300)/500,1)*a;cx.save();cx.globalAlpha=pa;
+    cx.strokeStyle='#00d4ff';cx.lineWidth=2;cx.beginPath();cx.moveTo(s2X+tofW,cY);cx.lineTo(s2X+tofW+55,cY);cx.stroke();
+    txt('Protons Only',s2X+tofW+30,cY-14,'#00d4ff',10);
+    cx.strokeStyle='#f97316';cx.lineWidth=1.3;cx.setLineDash([2,4]);
+    cx.beginPath();cx.moveTo(s2X+tofW+6,cY-5);cx.lineTo(s2X+tofW+52,cY-34);cx.stroke();
+    cx.beginPath();cx.moveTo(s2X+tofW+6,cY+5);cx.lineTo(s2X+tofW+52,cY+34);cx.stroke();
+    cx.setLineDash([]);txt('K⁺ ✗',s2X+tofW+58,cY-40,'#f97316',9);txt('B ✗',s2X+tofW+58,cY+40,'#c084fc',9);cx.restore();
+  }
+  if(t>1500){
+    const ha=Math.min((t-1500)/600,1)*a;
+    const hX=W*.58,hW=W*.36,hH=H*.64,hY=H*.08;
+    drawTOFHistogram(hX,hY,hW,hH,ha,Math.min((t-1500)/3000,1));
+    if(ha>0.5){
+      const td=TOF_DATA;const iaX=hX,iaY=hY+hH+12,iaW=hW,iaH=H*.1;
+      cx.save();cx.globalAlpha=Math.min((ha-0.5)/0.5,1);
+      rr(iaX,iaY,iaW,iaH,7);cx.fillStyle='rgba(2,6,20,.94)';cx.fill();cx.strokeStyle='rgba(0,255,180,.2)';cx.lineWidth=1;cx.stroke();
+      txt(`t = L/(β·c)  |  p: β=${td.beta_p.toFixed(4)}, t=${td.tProton.toFixed(2)}ns  |  K⁺: β=${td.beta_k.toFixed(4)}, t=${td.tKaon.toFixed(2)}ns  |  Δt(p−K)=${td.dtPK.toFixed(2)}ns  >>  σ_TOF~0.2ns`,iaX+iaW/2,iaY+20,'#fbbf24',9,"'Share Tech Mono',monospace");
+      cx.restore();
+    }
+  }
+  const spRate=0.04*BEAM_INTENSITY;
+  if(Math.random()<spRate) spawnParticle(s1X,cY+(Math.random()-.5)*18,6.5+Math.random(),(Math.random()-.5)*.2,'proton');
+  if(Math.random()<spRate*0.3) spawnParticle(s1X,cY+(Math.random()-.5)*18,6.5+Math.random(),(Math.random()-.5)*.2,'kion',tof2Stop);
+  if(Math.random()<spRate*0.15) spawnParticle(s1X,cY+(Math.random()-.5)*18,6.5+Math.random(),(Math.random()-.5)*.2,'bion',tof2Stop);
+  tickParticles(.038,.05);
+}
+
+function s4(t){
+  const a=Math.min(t/600,1);
+  const tX=W*.08,tW=W*.56,tH=H*.28,tY=H*.12;
+  const chartY=tY+tH+50,chartH=H*.3,chartW=tW+W*.22;
+  drawMuscleJelly(tX,tY,tW,tH,a);
+  cx.save();cx.globalAlpha=a*.6;
+  for(let z=0;z<=MAXD;z+=4){
+    const gx=tX+(z/MAXD)*tW;cx.strokeStyle='rgba(0,150,80,.18)';cx.lineWidth=.5;
+    cx.beginPath();cx.moveTo(gx,tY);cx.lineTo(gx,tY+tH);cx.stroke();
+    if(z%8===0) txt(z,gx,tY+tH+11,'#1a4a2a',8.5);
+  }
+  txt('Depth (cm)',tX+tW/2,tY+tH+24,'#2a5040',9.5);cx.restore();
+  const prog=Math.min(t/3000,1);
+  cx.save();cx.globalAlpha=a;
+  const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+  for(let i=0;i<Math.floor(N*prog);i++){
+    const v=DD_W[i]/DMAX;const bx3=tX+(i*DZ/MAXD)*tW;
+    const dw=Math.max(1.2,(DZ/MAXD)*tW);const dh=v*(tH*.85);
+    cx.fillStyle=jet(Math.pow(v,iExp));cx.fillRect(bx3,tY+tH/2-dh/2,dw,dh);
+  }
+  cx.restore();
+  const pz=peakZ(DD_W);
+  if(Math.random()<.06*BEAM_INTENSITY&&prog<.9) spawnParticle(tX-8,tY+tH/2+(Math.random()-.5)*14,5.5,.0,'proton');
+  if(prog>.75){
+    const ma=Math.min((prog-.75)/.25,1);const bpx=tX+(pz/MAXD)*tW;
+    cx.save();cx.globalAlpha=a*ma;
+    cx.strokeStyle='#00d4ff';cx.lineWidth=2;cx.setLineDash([4,4]);cx.shadowBlur=18;cx.shadowColor='#00d4ff';
+    cx.beginPath();cx.moveTo(bpx,tY);cx.lineTo(bpx,tY+tH);cx.stroke();
+    cx.shadowBlur=0;cx.setLineDash([]);radialGlow(bpx,tY+tH/2,30,'rgba(0,212,255,.2)');
+    rr(bpx-52,tY-18,104,16,4);cx.fillStyle='rgba(0,212,255,.18)';cx.fill();cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=.8;cx.stroke();
+    txt(`BRAGG PEAK  ${pz.toFixed(2)} cm`,bpx,tY-10,'#00d4ff',10.5);cx.restore();
+  }
+  if(t>1200){
+    const ca=Math.min((t-1200)/700,1)*a;cx.save();cx.globalAlpha=ca;
+    drawChart({x:tX,y:chartY,w:chartW,h:chartH,xMax:MAXD,
+      title:`Bragg-Kleeman: R = α·Eᵖ = 0.0022×${E0}^1.77 = ${RANGE.toFixed(2)} cm`,
+      curves:[{dd:DD_W,col:'#00ffaa',lw:3,filled:true,label:`Muscle Jelly ${E0} MeV  (R=${RANGE.toFixed(2)} cm)`}],
+      progress:Math.min((t-1200)/3000,1)});
+    cx.restore();
+  }
+  if(t>2500){
+    const ia=Math.min((t-2500)/500,1)*a;const iX2=tX+chartW+20,iY2=tY,iW2=W-tX-chartW-30;
+    cx.save();cx.globalAlpha=ia;
+    cx.fillStyle='rgba(2,6,20,.92)';cx.strokeStyle='rgba(0,212,255,.22)';cx.lineWidth=1;
+    rr(iX2,iY2,iW2,tH+80,8);cx.fill();cx.stroke();
+    txt('BRAGG RULE',iX2+iW2/2,iY2+18,'#00d4ff',11);
+    [{t:'R = α · Eᵖ',c:'#00ffaa',sz:10.5},{t:`R = ${RANGE.toFixed(2)} cm`,c:'#00d4ff',sz:12},
+     {t:'',c:'',sz:9},{t:`α=${α}  p=${P}`,c:'#5a7090',sz:9},{t:'',c:'',sz:9},
+     {t:`σ_R = ${STRAG_SIGMA.toFixed(2)} cm`,c:'#f87171',sz:10},{t:'(range straggling)',c:'#5a7090',sz:9},
+     {t:'KEY ADVANTAGE:',c:'#f59e0b',sz:10},{t:'Max dose AT tumor',c:'#00ffaa',sz:10},{t:'Minimal exit dose',c:'#00ffaa',sz:10}
+    ].forEach(({t:lt,c,sz},i)=>{if(!lt) return;txt(lt,iX2+12,iY2+38+i*19,c,sz,'Rajdhani,sans-serif','left');});
+    cx.restore();
+  }
+  document.getElementById('m0').innerHTML=`${pz.toFixed(2)}<span class="met-u">cm</span>`;
+  tickParticles(.025,.035);
+}
+
+function s5(t){
+  const a=Math.min(t/600,1);const cY=H*.4;
+  const phantomX=W*.06,phantomW=W*.32,phantomH=100,phantomY=cY-50;
+  const scintX=phantomX+phantomW+14,scintW=14,scintH=120;
+  const blockWET=1.0;const blockPxW=(phantomW/MAXD)*blockWET;
+  const maxBlocks=Math.floor(RANGE)+5;
+  const nBlocks=Math.min(Math.floor(Math.max(t-800,0)/380),maxBlocks);
+  const totalWEP=nBlocks*blockWET;
+  cx.save();cx.globalAlpha=a;
+  rr(W*.06,H*.07,W*.88,42,8);cx.fillStyle='rgba(0,4,18,.9)';cx.fill();
+  cx.strokeStyle='rgba(0,255,170,.15)';cx.lineWidth=1;cx.stroke();
+  txt('BLOCK-STACK BRAGG PEAK DETECTION METHOD',W*.5,H*.07+14,'#00ffaa',11,"'Share Tech Mono',monospace");
+  txt('Add 1 cm WE phantom blocks until scintillator signal drops sharply — that total depth = Bragg range',W*.5,H*.07+29,'#2a5a40',9.5);
+  cx.restore();
+  drawMuscleJelly(phantomX,phantomY,phantomW,phantomH,a,'MUSCLE JELLY (fixed)');
+  cx.save();cx.globalAlpha=a;
+  cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=2;cx.beginPath();cx.moveTo(phantomX-35,cY);cx.lineTo(phantomX,cY);cx.stroke();
+  rr(phantomX-60,cY-22,24,44,4);cx.fillStyle='rgba(0,212,255,.08)';cx.fill();cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=1.5;cx.stroke();
+  txt('p',phantomX-48,cY,'#00d4ff',13,"'Orbitron',monospace");txt(`${E0}MeV`,phantomX-48,cY+14,'#38bdf8',8);cx.restore();
+  for(let b=0;b<nBlocks;b++){
+    const bx=scintX+scintW+6+b*(blockPxW+2);const bH=70,bY2=cY-bH/2;
+    const bProg=Math.min((t-800-b*380)/250,1);if(bProg<=0) break;
+    const pastPeak=totalWEP>RANGE+0.5;const bCol=pastPeak&&b>=Math.floor(RANGE)?'#f87171':'#00d4ff';
+    cx.save();cx.globalAlpha=a*Math.min(bProg,1);
+    const [r2,g2,b2]=hexToComponents(bCol);rr(bx,bY2,Math.max(2,blockPxW-1),bH,3);
+    cx.fillStyle=`rgba(${r2},${g2},${b2},.18)`;cx.fill();cx.strokeStyle=bCol;cx.lineWidth=1;cx.stroke();cx.restore();
+  }
+  if(nBlocks>0){
+    cx.save();cx.globalAlpha=a;const labelX=scintX+scintW+6+nBlocks*(blockPxW+2)/2;
+    txt(`${nBlocks} blocks`,labelX,cY-50,'#60a5fa',9);txt(`WEP: ${totalWEP.toFixed(1)} cm`,labelX,cY-38,'#60a5fa',9.5,"'Orbitron',monospace");cx.restore();
+  }
+  const sigIdx=Math.min(Math.floor(totalWEP/DZ),N-1);const signal=totalWEP<=0?0:DD_W[sigIdx]/DMAX;
+  const scintBeamY=cY;
+  cx.save();cx.globalAlpha=a;
+  const sCol=signal>0.3?`rgba(251,191,36,${signal*.9})`:'rgba(251,191,36,.1)';
+  const sg=cx.createLinearGradient(scintX,phantomY,scintX+scintW,phantomY+scintH);
+  sg.addColorStop(0,'rgba(251,191,36,.1)');sg.addColorStop(.5,sCol);sg.addColorStop(1,'rgba(251,191,36,.1)');
+  rr(scintX,phantomY,scintW,scintH,4);cx.fillStyle=sg;cx.fill();cx.strokeStyle='rgba(251,191,36,.7)';cx.lineWidth=2;cx.stroke();
+  if(signal>0.05){
+    const gr=cx.createRadialGradient(scintX+scintW/2,scintBeamY,0,scintX+scintW/2,scintBeamY,scintW*2.5);
+    gr.addColorStop(0,`rgba(251,191,36,${signal*.6})`);gr.addColorStop(1,'rgba(0,0,0,0)');
+    cx.beginPath();cx.arc(scintX+scintW/2,scintBeamY,scintW*2.5,0,Math.PI*2);cx.fillStyle=gr;cx.fill();
+  }
+  txt('SCINT.',scintX+scintW/2,phantomY-14,'#fbbf24',9);
+  txt(`SIG: ${(signal*100).toFixed(0)}%`,scintX+scintW/2,phantomY+scintH+14,'#fbbf24',9.5,"'Orbitron',monospace");cx.restore();
+  if(t>800){
+    const chX=W*.06,chY=cY+90,chW=W*.55,chH=H*.28;const chA=Math.min((t-800)/600,1)*a;
+    cx.save();cx.globalAlpha=chA;
+    rr(chX,chY,chW,chH,9);cx.fillStyle='rgba(2,6,20,.94)';cx.fill();cx.strokeStyle='rgba(0,255,170,.2)';cx.lineWidth=1;cx.stroke();
+    txt('Scintillator Signal vs Block Stack Depth',chX+chW/2,chY+14,'#00ffaa',10);
+    const iX=chX+50,iY=chY+28,iW=chW-64,iH=chH-46;const xMax2=maxBlocks*blockWET;
+    cx.strokeStyle='rgba(40,80,120,.7)';cx.lineWidth=1;
+    cx.beginPath();cx.moveTo(iX,iY);cx.lineTo(iX,iY+iH+4);cx.stroke();
+    cx.beginPath();cx.moveTo(iX,iY+iH);cx.lineTo(iX+iW+4,iY+iH);cx.stroke();
+    txt('Total WE depth (cm)',iX+iW/2,iY+iH+20,'#3a5070',9);txt('Signal (norm.)',iX-28,iY+iH/2,'#3a5070',9,'monospace','center','middle');
+    for(let d=0;d<=xMax2;d+=5){
+      const gx=iX+(d/xMax2)*iW;cx.strokeStyle='rgba(255,255,255,.04)';cx.lineWidth=.4;
+      cx.beginPath();cx.moveTo(gx,iY);cx.lineTo(gx,iY+iH);cx.stroke();txt(d,gx,iY+iH+10,'#2e4060',8.5);
+    }
+    const plotN=nBlocks;cx.strokeStyle='#00d4ff';cx.lineWidth=2.5;cx.shadowBlur=6;cx.shadowColor='#00d4ff66';
+    for(let b2=1;b2<=plotN;b2++){
+      const dep=(b2-1)*blockWET,dep2=b2*blockWET;
+      const idx0=Math.min(Math.floor(dep/DZ),N-1),idx2=Math.min(Math.floor(dep2/DZ),N-1);
+      const s0v=dep<=0?0:DD_W[idx0]/DMAX,s2v=dep2<=0?0:DD_W[idx2]/DMAX;
+      cx.beginPath();cx.moveTo(iX+(dep/xMax2)*iW,iY+iH-s0v*iH*.9);cx.lineTo(iX+(dep2/xMax2)*iW,iY+iH-s2v*iH*.9);cx.stroke();
+      cx.beginPath();cx.arc(iX+(dep2/xMax2)*iW,iY+iH-s2v*iH*.9,3,0,Math.PI*2);cx.fillStyle='#00d4ff';cx.fill();
+    }
+    cx.shadowBlur=0;
+    const rangeGx=iX+(RANGE/xMax2)*iW;
+    cx.strokeStyle='rgba(0,255,170,.5)';cx.lineWidth=1.5;cx.setLineDash([4,4]);
+    cx.beginPath();cx.moveTo(rangeGx,iY);cx.lineTo(rangeGx,iY+iH);cx.stroke();cx.setLineDash([]);
+    rr(rangeGx-40,iY-18,80,16,4);cx.fillStyle='rgba(0,255,170,.14)';cx.fill();cx.strokeStyle='rgba(0,255,170,.4)';cx.lineWidth=.7;cx.stroke();
+    txt(`R = ${RANGE.toFixed(2)} cm`,rangeGx,iY-10,'#00ffaa',9);
+    if(totalWEP>=RANGE&&nBlocks>0){
+      const dropA=Math.min((totalWEP-RANGE)/2,1);
+      cx.save();cx.globalAlpha=dropA*chA;
+      rr(rangeGx+6,iY+iH*.25-10,130,28,5);cx.fillStyle='rgba(248,113,113,.1)';cx.fill();cx.strokeStyle='rgba(248,113,113,.4)';cx.lineWidth=.8;cx.stroke();
+      txt('⬇ SIGNAL DROP DETECTED',rangeGx+71,iY+iH*.25+4,'#f87171',9.5);cx.restore();
+    }
+    cx.restore();
+  }
+  if(t>1200){
+    const ia=Math.min((t-1200)/600,1)*a;const iX2=W*.64,iY2=cY+90,iW2=W*.3,iH2=H*.28;
+    cx.save();cx.globalAlpha=ia;cx.fillStyle='rgba(2,6,20,.92)';cx.strokeStyle='rgba(0,255,170,.22)';cx.lineWidth=1;
+    rr(iX2,iY2,iW2,iH2,8);cx.fill();cx.stroke();txt('BLOCK-STACK METHOD',iX2+iW2/2,iY2+18,'#00ffaa',10.5);
+    [{t:'1. Fix scintillator position',c:'#ccdde8',sz:10},{t:'2. Add 1cm WE blocks between',c:'#ccdde8',sz:10},
+     {t:'   beam + scintillator',c:'#3a6050',sz:9.5},{t:'3. Record signal each time',c:'#ccdde8',sz:10},
+     {t:'4. Signal rises → peak → DROPS',c:'#f87171',sz:10},{t:'5. Drop marks Bragg range!',c:'#00ffaa',sz:10.5},
+     {t:'',c:'',sz:9},{t:`R = ${RANGE.toFixed(2)} cm confirmed`,c:'#00d4ff',sz:11},
+     {t:'No curve fitting needed —',c:'#f59e0b',sz:9.5},{t:'directly measured in lab',c:'#f59e0b',sz:9.5}
+    ].forEach(({t:lt,c,sz},i)=>{if(!lt) return;txt(lt,iX2+12,iY2+36+i*22,c,sz,'Rajdhani,sans-serif','left');});
+    cx.restore();
+  }
+  tickParticles(.025,.03);
+}
+
+function s6(t){
+  const a=Math.min(t/600,1);
+  const tX=W*.08,tW=W*.56,tH=H*.22,tY=H*.1;
+  const chartX=W*.08,chartW=W*.64,chartH=H*.38,chartY=tY+tH+42;
+  drawMuscleJelly(tX,tY,tW,tH,a,'MUSCLE JELLY PHANTOM — Nuclear Interaction Tail Visualization');
+  const pz=peakZ(DD_W);const bpx=tX+(pz/MAXD)*tW;const prog=Math.min(t/3000,1);
+  cx.save();cx.globalAlpha=a;const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+  for(let i=0;i<Math.floor(N*prog);i++){
+    const v=DD_TAIL[i]/DMAX;const bx3=tX+(i*DZ/MAXD)*tW;
+    const dw=Math.max(1.2,(DZ/MAXD)*tW);const dh=v*(tH*.85);
+    cx.fillStyle=jet(Math.pow(v,iExp));cx.fillRect(bx3,tY+tH/2-dh/2,dw,dh);
+  }
+  cx.restore();
+  if(t>1500&&prog>.6){
+    const na=Math.min((t-1500)/800,1)*a;cx.save();cx.globalAlpha=na;
+    cx.beginPath();cx.arc(bpx,tY+tH/2,12,0,Math.PI*2);cx.fillStyle='rgba(245,158,11,.3)';cx.fill();cx.strokeStyle='rgba(245,158,11,.7)';cx.lineWidth=2;cx.stroke();
+    txt('⚛',bpx,tY+tH/2,'#f59e0b',14);txt('NUCLEUS',bpx,tY+tH/2+26,'#f59e0b',8.5);
+    if(Math.sin(t*.003)>.8) radialGlow(bpx,tY+tH/2,40,'rgba(255,200,0,.3)');cx.restore();
+    if(Math.random()<.08*BEAM_INTENSITY){
+      const angs=[0,.5,1.1,1.8,2.6,3.4,4.2,5.1];
+      angs.forEach(ang=>{if(Math.random()<.35){const type2=Math.random()<.4?'neutron':'gamma';spawnParticle(bpx+(Math.random()-.5)*8,tY+tH/2+(Math.random()-.5)*8,Math.cos(ang)*3.5,Math.sin(ang)*3.5,type2);}});
+    }
+  }
+  if(prog>.7){
+    cx.save();cx.globalAlpha=a;cx.strokeStyle='#00d4ff';cx.lineWidth=1.5;cx.setLineDash([4,4]);
+    cx.beginPath();cx.moveTo(bpx,tY);cx.lineTo(bpx,tY+tH);cx.stroke();cx.setLineDash([]);txt(`PEAK ${pz.toFixed(2)} cm`,bpx,tY-9,'#00d4ff',9.5);cx.restore();
+  }
+  if(t>1000){
+    const ca=Math.min((t-1000)/600,1)*a;cx.save();cx.globalAlpha=ca;
+    drawChart({x:chartX,y:chartY,w:chartW,h:chartH,xMax:MAXD,
+      title:'Nuclear Interaction Tail — ~1.2% dose past Bragg peak (inelastic reactions)',
+      curves:[{dd:DD_W,col:'#00ffaa',label:'Primary protons only',lw:2.5},{dd:DD_TAIL,col:'#f87171',dash:[5,3],label:'With nuclear tail (~1.2%)',lw:2.2}],
+      progress:Math.min((t-1000)/3500,1)});
+    cx.restore();
+  }
+  if(t>2500){
+    const ia=Math.min((t-2500)/600,1)*a;const iX2=chartX+chartW+14,iW2=W-chartX-chartW-22;
+    cx.save();cx.globalAlpha=ia;cx.fillStyle='rgba(2,6,20,.92)';cx.strokeStyle='rgba(248,113,113,.22)';cx.lineWidth=1;
+    rr(iX2,chartY,iW2,chartH,8);cx.fill();cx.stroke();txt('PAST THE PEAK',iX2+iW2/2,chartY+18,'#f87171',10.5);
+    [{t:'Block-stack detects tail!',c:'#f87171',sz:10},{t:'Signal NEVER reaches 0%',c:'#f87171',sz:10},
+     {t:'→ ~1.2% plateau persists',c:'#f59e0b',sz:9.5},{t:'',c:'',sz:9},
+     {t:'Inelastic reactions:',c:'#f59e0b',sz:10},{t:'p + ¹⁶O → products',c:'#fbbf24',sz:10},
+     {t:'→ fast neutrons',c:'#a78bfa',sz:9.5},{t:'→ gamma photons',c:'#a78bfa',sz:9.5},
+     {t:'',c:'',sz:9},{t:'OAR risk: ⚠ 1.2%',c:'#f87171',sz:10},{t:'beyond tumor range',c:'#94a3b8',sz:9.5}
+    ].forEach(({t:lt,c,sz},i)=>{if(!lt) return;txt(lt,iX2+12,chartY+34+i*21,c,sz,'Rajdhani,sans-serif','left');});
+    cx.restore();
+  }
+  if(Math.random()<.04*BEAM_INTENSITY) spawnParticle(tX-8,tY+tH/2+(Math.random()-.5)*14,5.5,0,'proton');
+  tickParticles(.06,.02);
+}
+
+function s7(t){
+  const a=Math.min(t/600,1);
+  const tX=W*.08,tW=W*.58,tH=H*.26,tY=H*.1;
+  const boneZ_cm=8,boneT_cm=1;
+  const bxS=tX+(boneZ_cm/MAXD)*tW;const bxE=tX+((boneZ_cm+boneT_cm)/MAXD)*tW;
+  const chartY=tY+tH+50,chartH=H*.3,chartW=tW+W*.22;
+  drawMuscleJelly(tX,tY,tW,tH,a,'MUSCLE JELLY PHANTOM + BONE INSERT  (θ = 0°)');
+  cx.save();cx.globalAlpha=a;drawBoneSlab(cx,bxS,tY,(bxE-bxS)*1.5,tH,0,a);
+  txt('SPR = 1.65',(bxS+bxE)/2,tY-14,'#f59e0b',9.5);txt('d = 1.0 cm',(bxS+bxE)/2,tY+tH+14,'#f59e0b',9);cx.restore();
+  const prog=Math.min(t/3200,1);cx.save();cx.globalAlpha=a;const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+  for(let i=0;i<Math.floor(N*prog);i++){
+    const v=DD_B0[i]/DMAX;const bx3=tX+(i*DZ/MAXD)*tW;
+    cx.fillStyle=jet(Math.pow(v,iExp));cx.fillRect(bx3,tY+tH/2-v*(tH*.85)/2,Math.max(1.2,(DZ/MAXD)*tW),v*(tH*.85));
+  }
+  cx.restore();
+  if(prog>.75){
+    const pJ=peakZ(DD_W),pB=peakZ(DD_B0);const pxJ=tX+(pJ/MAXD)*tW,pxB=tX+(pB/MAXD)*tW;
+    const ma=Math.min((prog-.75)/.25,1);cx.save();cx.globalAlpha=a*ma;
+    cx.strokeStyle='rgba(0,255,170,.4)';cx.lineWidth=1.5;cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(pxJ,tY);cx.lineTo(pxJ,tY+tH);cx.stroke();cx.setLineDash([]);
+    txt(`Jelly: ${pJ.toFixed(2)} cm`,pxJ,tY-9,'rgba(0,255,170,.6)',9);
+    cx.strokeStyle='#f87171';cx.lineWidth=2;cx.setLineDash([5,4]);cx.shadowBlur=12;cx.shadowColor='#f87171';
+    cx.beginPath();cx.moveTo(pxB,tY);cx.lineTo(pxB,tY+tH);cx.stroke();cx.shadowBlur=0;cx.setLineDash([]);
+    arrow(pxJ,tY+10,pxB,tY+10,'#fbbf24',2);txt(`Δ = ${(pJ-pB).toFixed(2)} cm`,(pxJ+pxB)/2,tY+2,'#fbbf24',10);
+    rr(pxB-52,tY-18,104,15,4);cx.fillStyle='rgba(248,113,113,.16)';cx.fill();cx.strokeStyle='rgba(248,113,113,.5)';cx.lineWidth=.8;cx.stroke();
+    txt(`BONE BRAGG: ${pB.toFixed(2)} cm`,pxB,tY-11,'#f87171',10);cx.restore();
+  }
+  if(t>1500){
+    const ca=Math.min((t-1500)/600,1)*a;cx.save();cx.globalAlpha=ca;
+    drawChart({x:tX,y:chartY,w:chartW,h:chartH,xMax:MAXD,
+      title:'Bone 0° — WET = d × SPR = 1.0 × 1.65 = 1.65 cm  |  Δ = (SPR−1)×d = 0.65 cm',
+      boneZ:boneZ_cm,boneT:boneT_cm,
+      curves:[{dd:DD_W,col:'#00ffaa',label:'Muscle Jelly only (reference)',lw:2.5},{dd:DD_B0,col:'#f87171',dash:[5,3],label:`Bone 0° — Δ=${SHIFT0.toFixed(2)} cm pull-back`,lw:2.2}],
+      progress:Math.min((t-1500)/3000,1)});
+    cx.restore();
+  }
+  if(t>3000){
+    const ia=Math.min((t-3000)/500,1)*a;const iX2=tX+chartW+14,iW2=W-tX-chartW-22;
+    cx.save();cx.globalAlpha=ia;cx.fillStyle='rgba(2,6,20,.92)';cx.strokeStyle='rgba(245,158,11,.25)';cx.lineWidth=1;
+    rr(iX2,chartY,iW2,chartH,8);cx.fill();cx.stroke();txt('WET CALCULATION',iX2+iW2/2,chartY+18,'#f59e0b',10.5);
+    [{t:`WE = d × SPR`,c:'#fbbf24',sz:11},{t:`   = 1.0 × 1.65`,c:'#a78bfa',sz:10},
+     {t:`   = ${WET.toFixed(2)} cm`,c:'#00ffaa',sz:12},{t:'',c:'',sz:9},
+     {t:`Δ = (SPR−1)×d`,c:'#fbbf24',sz:10.5},{t:`  = 0.65 × 1.0`,c:'#a78bfa',sz:10},
+     {t:`  = ${SHIFT0.toFixed(2)} cm`,c:'#f87171',sz:12},{t:'',c:'',sz:9},
+     {t:'⚠ Range pull-back!',c:'#f87171',sz:10},{t:'Correct in planning.',c:'#f87171',sz:10}
+    ].forEach(({t:lt,c,sz},i)=>{if(!lt) return;txt(lt,iX2+12,chartY+34+i*22,c,sz,'Rajdhani,sans-serif','left');});
+    cx.restore();
+  }
+  document.getElementById('m1').innerHTML=`${SHIFT0.toFixed(2)}<span class="met-u">cm</span>`;
+  if(Math.random()<.04*BEAM_INTENSITY) spawnParticle(tX-8,tY+tH/2+(Math.random()-.5)*14,5.5,0,'proton');
+  tickParticles(.025,.04);
+}
+
+function s8(t){
+  const a=Math.min(t/600,1);
+  const tX=W*.08,tW=W*.58,tH=H*.26,tY=H*.1;
+  const boneZ_cm=8,boneT_cm=1;const bxS=tX+(boneZ_cm/MAXD)*tW;const bxE=tX+((boneZ_cm+boneT_cm)/MAXD)*tW;
+  const chartY=tY+tH+50,chartH=H*.3,chartW=tW+W*.22;
+  const boneAngleDeg=60;const effThick=(1/Math.cos(boneAngleDeg*Math.PI/180)).toFixed(3);
+  const animAng=Math.min(t/1200,1)*boneAngleDeg;const boneColor='#fb923c';
+  drawMuscleJelly(tX,tY,tW,tH,a,`MUSCLE JELLY PHANTOM + BONE INSERT  (θ = ${boneAngleDeg}°)`);
+  const bcx2=(bxS+bxE)/2;cx.save();cx.globalAlpha=a;
+  drawBoneSlab(cx,bcx2-(bxE-bxS)/2,tY,(bxE-bxS)*1.5,tH,animAng,a);
+  cx.strokeStyle='rgba(245,158,11,.5)';cx.lineWidth=1;
+  cx.beginPath();cx.arc(bcx2,tY+tH/2,38,Math.PI/2,Math.PI/2-animAng*Math.PI/180);cx.stroke();
+  txt(`${Math.round(animAng)}°`,bcx2+44,tY+tH/2-20,'#fbbf24',11);cx.restore();
+  const prog=Math.min(t/3200,1);const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+  cx.save();cx.globalAlpha=a;
+  for(let i=0;i<Math.floor(N*prog);i++){
+    const v=DD_B60[i]/DMAX;const bx3=tX+(i*DZ/MAXD)*tW;
+    cx.fillStyle=jet(Math.pow(v,iExp));cx.fillRect(bx3,tY+tH/2-v*(tH*.85)/2,Math.max(1.2,(DZ/MAXD)*tW),v*(tH*.85));
+  }
+  cx.restore();
+  if(prog>.75){
+    const pJ=peakZ(DD_W),pB=peakZ(DD_B60);const pxJ=tX+(pJ/MAXD)*tW,pxB=tX+(pB/MAXD)*tW;
+    const ma=Math.min((prog-.75)/.25,1);cx.save();cx.globalAlpha=a*ma;
+    cx.strokeStyle='rgba(0,255,170,.4)';cx.lineWidth=1.5;cx.setLineDash([4,4]);cx.beginPath();cx.moveTo(pxJ,tY);cx.lineTo(pxJ,tY+tH);cx.stroke();cx.setLineDash([]);
+    cx.strokeStyle=boneColor;cx.lineWidth=2;cx.setLineDash([5,4]);cx.shadowBlur=12;cx.shadowColor=boneColor;
+    cx.beginPath();cx.moveTo(pxB,tY);cx.lineTo(pxB,tY+tH);cx.stroke();cx.shadowBlur=0;cx.setLineDash([]);
+    arrow(pxJ,tY+10,pxB,tY+10,'#fbbf24',2);txt(`Δ = ${(pJ-pB).toFixed(2)} cm`,(pxJ+pxB)/2,tY+2,'#fbbf24',10);
+    rr(pxB-52,tY-18,104,15,4);
+    const [r2,g2,b2]=hexToComponents(boneColor);cx.fillStyle=`rgba(${r2},${g2},${b2},0.15)`;cx.fill();
+    cx.strokeStyle=boneColor;cx.lineWidth=.8;cx.stroke();txt(`BONE 60°: ${pB.toFixed(2)} cm`,pxB,tY-11,boneColor,10);cx.restore();
+  }
+  if(t>1500){
+    const ca=Math.min((t-1500)/600,1)*a;cx.save();cx.globalAlpha=ca;
+    drawChart({x:tX,y:chartY,w:chartW,h:chartH,xMax:MAXD,
+      title:`Oblique Bone 60° — Eff. Thickness = d/cos60° = ${effThick} cm  |  Δ = ${SHIFT60.toFixed(2)} cm`,
+      boneZ:boneZ_cm,boneT:boneT_cm,
+      curves:[{dd:DD_W,col:'#00ffaa',label:'Muscle Jelly (reference)',lw:2.5},{dd:DD_B0,col:'#f87171',dash:[5,3],label:`Bone 0° — Δ=${SHIFT0.toFixed(2)} cm`,lw:1.8},{dd:DD_B60,col:boneColor,dash:[3,2],label:`Bone 60° — Δ=${SHIFT60.toFixed(2)} cm`,lw:2.2}],
+      progress:Math.min((t-1500)/3500,1)});
+    cx.restore();
+  }
+  if(t>3200){
+    const ia=Math.min((t-3200)/500,1)*a;const iX2=tX+chartW+14,iW2=W-tX-chartW-22;
+    cx.save();cx.globalAlpha=ia;cx.fillStyle='rgba(2,6,20,.92)';
+    const [r2,g2,b2]=hexToComponents(boneColor);cx.strokeStyle=`rgba(${r2},${g2},${b2},0.25)`;cx.lineWidth=1;
+    rr(iX2,chartY,iW2,chartH,8);cx.fill();cx.stroke();txt('60° GEOMETRY',iX2+iW2/2,chartY+18,boneColor,10.5);
+    [{t:'Eff. thick = d/cosθ',c:'#fbbf24',sz:10.5},{t:'= 1.0/cos(60°)',c:'#a78bfa',sz:10},
+     {t:`= ${effThick} cm`,c:'#00ffaa',sz:12},{t:'',c:'',sz:9},
+     {t:`Δ = ${SHIFT60.toFixed(2)} cm`,c:'#f87171',sz:11},{t:`vs ${SHIFT0.toFixed(2)} cm at 0°`,c:'#94a3b8',sz:9.5},
+     {t:'',c:'',sz:9},{t:'PENUMBRA maximal!',c:boneColor,sz:10},{t:'→ largest MCS effect',c:'#94a3b8',sz:9.5},
+     {t:'→ hot/cold spots',c:'#94a3b8',sz:9.5},{t:'',c:'',sz:9},{t:'Min by optimising θ',c:'#f59e0b',sz:10},{t:'0° gives least shift',c:'#f59e0b',sz:10}
+    ].forEach(({t:lt,c,sz},i)=>{if(!lt) return;txt(lt,iX2+12,chartY+34+i*22,c,sz,'Rajdhani,sans-serif','left');});
+    cx.restore();
+  }
+  document.getElementById('m1').innerHTML=`${SHIFT60.toFixed(2)}<span class="met-u">cm</span>`;
+  if(Math.random()<.04*BEAM_INTENSITY) spawnParticle(tX-8,tY+tH/2+(Math.random()-.5)*14,5.5,(Math.random()-.5)*.08,'proton');
+  tickParticles(.025,.05);
+}
+
+function s9(t){
+  const a=Math.min(t/500,1);
+  const cX=W*.07,cW=W*.56,cH=H*.52,cY=H*.09;
+  cx.save();cx.globalAlpha=a;
+  drawChart({x:cX,y:cY,w:cW,h:cH,xMax:MAXD,title:'Complete Results — All Scenarios Overlaid',boneZ:8,boneT:1,
+    curves:[{dd:DD_W,col:'#00ffaa',lw:3,filled:true,label:'Muscle Jelly (reference)'},{dd:DD_STRAG,col:'#a78bfa',dash:[6,3],lw:1.8,label:'After C/Al degrader (+straggling)'},{dd:DD_TAIL,col:'rgba(248,113,113,.8)',dash:[3,2],lw:1.5,label:'Nuclear interaction tail (~1.2%)'},{dd:DD_B0,col:'#f87171',dash:[5,3],lw:2,label:`Bone 0° (Δ=${SHIFT0.toFixed(2)} cm)`},{dd:DD_B60,col:'#fb923c',dash:[2,2],lw:1.8,label:`Bone 60° (Δ=${SHIFT60.toFixed(2)} cm)`}],
+    progress:Math.min(t/5500,1)});
+  cx.restore();
+  if(t>1500){
+    const ra=Math.min((t-1500)/700,1)*a;const rX=cX+cW+16,rW=W-cX-cW-24,rY=cY,rH=cH;
+    cx.save();cx.globalAlpha=ra;cx.fillStyle='rgba(2,6,20,.94)';cx.strokeStyle='rgba(0,212,255,.18)';cx.lineWidth=1.2;
+    rr(rX,rY,rW,rH,8);cx.fill();cx.stroke();txt('RESULTS SUMMARY',rX+rW/2,rY+18,'#00ffaa',10.5);
+    const mat=MATERIALS[CURRENT_MAT];
+    const rows=[['Cyclotron',`${E_INIT} MeV`,'#38bdf8'],['Post-degrader',`${E0} MeV`,'#00d4ff'],['Material',mat.name.split(' ')[0],'#a78bfa'],['Degrader thick.',`${DEGRAD_THICK.toFixed(3)} cm`,'#a78bfa'],['Bragg range',`${RANGE.toFixed(2)} cm`,'#00d4ff'],['DWC beam',`5→2 mm`,'#60a5fa'],['Block-stack Δ','confirmed ✓','#00ffaa'],['WET (bone 0°)',`${WET.toFixed(2)} cm`,'#f59e0b'],['Shift 0°',`${SHIFT0.toFixed(2)} cm`,'#f87171'],['Shift 60°',`${SHIFT60.toFixed(2)} cm`,'#fb923c'],['Nuclear tail','~1.2% ⚠','#f59e0b'],['σ_R',`${STRAG_SIGMA.toFixed(3)} cm`,'#a78bfa'],['TOF Δt(p−K)',`${TOF_DATA.dtPK.toFixed(2)} ns`,'#fbbf24']];
+    rows.forEach(([l,v,c],i)=>{
+      const ry=rY+36+i*24;rr(rX+7,ry-10,rW-14,20,4);
+      cx.fillStyle=i%2===0?'rgba(255,255,255,.02)':'transparent';cx.fill();
+      txt(l,rX+14,ry,'#4a6080',10,'Rajdhani,sans-serif','left');txt(v,rX+rW-13,ry,c,11,"'Orbitron',monospace",'right');
+    });
+    cx.restore();
+  }
+  if(t>4000){
+    const ba=Math.min((t-4000)/600,1)*a;cx.save();cx.globalAlpha=ba;
+    cx.fillStyle='rgba(0,255,170,.05)';cx.strokeStyle='rgba(0,255,170,.28)';cx.lineWidth=1.5;
+    rr(W*.04,cY+cH+14,W*.92,50,8);cx.fill();cx.stroke();
+    const mat=MATERIALS[CURRENT_MAT];
+    txt(`${E_INIT}MeV → ${mat.name} degrader (${DEGRAD_THICK.toFixed(2)}cm NIST) → DWC 5→2mm → TOF p/K/B → Block-stack R=${RANGE.toFixed(1)}cm → Bone Δ(0°)=${SHIFT0.toFixed(2)} Δ(60°)=${SHIFT60.toFixed(2)}cm → Nuclear tail ~1.2%`,W/2,cY+cH+28,'#00ffaa',10.5,'Rajdhani,sans-serif');
+    txt(`R=αEᵖ  |  WE=d×SPR  |  Δ(θ)=(SPR/cosθ−1)×d  |  σ_R≈0.012×R  |  TOF: t=L/βc  |  Block-stack: signal drop → R  |  DWC: 5mm→2mm pencil beam`,W/2,cY+cH+44,'#1a3050',9.5,"'Share Tech Mono',monospace");
+    cx.restore();
+  }
+  tickParticles(.1,.005);
+}
+
+function s10(t){
+  const a=Math.min(t/600,1);
+  const tX=W*.08,tW=W*.60,tH=H*.24,tY=H*.08;
+  const gnpPxStart=tX+(GNP_Z_CM/MAXD)*tW;
+  const gnpPxW=(GNP_T_CM/MAXD)*tW;
+  const gnpPxEnd=gnpPxStart+gnpPxW;
+  const peakPx=tX+(peakZ(DD_W)/MAXD)*tW;
+  cx.save();cx.globalAlpha=a;
+  rr(W*.06,H*.02,W*.88,38,8);cx.fillStyle='rgba(0,4,18,.92)';cx.fill();
+  cx.strokeStyle='rgba(251,191,36,.22)';cx.lineWidth=1;cx.stroke();
+  txt('GOLD NANOPARTICLE GELATIN — COMPLETE TAIL ABSORPTION (ON BRAGG PEAK)',W*.5,H*.02+14,'#fbbf24',11,"'Share Tech Mono',monospace");
+  txt(`Au NP layer (Z=79, ${GNP_CONC_MG} mg/mL) centred ON the Bragg peak — 100% nuclear tail absorption — zero dose past gelatin`,W*.5,H*.02+28,'#7a6a20',9.5);
+  cx.restore();
+  drawMuscleJelly(tX,tY,tW,tH,a,'MUSCLE JELLY PHANTOM + Au GNP GELATIN LAYER (centred on Bragg peak)');
+  if(t>400){
+    const ga=Math.min((t-400)/700,1)*a;
+    drawGNPGelatin(gnpPxStart,tY,gnpPxW,tH,t,ga);
+  }
+  if(t>800){
+    const bpa=Math.min((t-800)/400,1)*a;
+    cx.save();cx.globalAlpha=bpa;
+    cx.strokeStyle='rgba(0,212,255,.6)';cx.lineWidth=1.5;cx.setLineDash([4,4]);
+    cx.beginPath();cx.moveTo(peakPx,tY);cx.lineTo(peakPx,tY+tH);cx.stroke();
+    cx.setLineDash([]);radialGlow(peakPx,tY+tH/2,22,'rgba(0,212,255,.18)');
+    rr(peakPx-36,tY-18,72,14,4);cx.fillStyle='rgba(0,212,255,.14)';cx.fill();cx.strokeStyle='rgba(0,212,255,.5)';cx.lineWidth=.7;cx.stroke();
+    txt(`BRAGG PEAK ${peakZ(DD_W).toFixed(2)} cm`,peakPx,tY-11,'#00d4ff',9);cx.restore();
+  }
+  if(t>600){
+    const bma=Math.min((t-600)/500,1)*a;
+    cx.save();cx.globalAlpha=bma;
+    cx.strokeStyle='rgba(251,191,36,.7)';cx.lineWidth=1.2;cx.setLineDash([3,3]);
+    cx.beginPath();cx.moveTo(gnpPxStart,tY-22);cx.lineTo(gnpPxStart,tY+tH+20);cx.stroke();
+    cx.beginPath();cx.moveTo(gnpPxEnd,tY-22);cx.lineTo(gnpPxEnd,tY+tH+20);cx.stroke();
+    cx.setLineDash([]);
+    txt('GNP centred ON Bragg peak',(gnpPxStart+gnpPxEnd)/2,tY-22,'#fbbf24',9.5);
+    arrow(gnpPxStart,tY+tH+16,gnpPxEnd,tY+tH+16,'#fbbf24',1.2);
+    txt(`${GNP_T_CM.toFixed(0)} cm thick`,(gnpPxStart+gnpPxEnd)/2,tY+tH+28,'#fbbf24',9);
+    cx.restore();
+  }
+  const prog=Math.min(t/3200,1);
+  cx.save();cx.globalAlpha=a;
+  const iExp=0.55/Math.max(0.4,BEAM_INTENSITY);
+  for(let i=0;i<Math.floor(N*prog);i++){
+    const v=DD_GNP[i]/DMAX;const bx3=tX+(i*DZ/MAXD)*tW;
+    const dw=Math.max(1.2,(DZ/MAXD)*tW);const dh=v*(tH*.85);
+    cx.fillStyle=jet(Math.pow(v,iExp));cx.fillRect(bx3,tY+tH/2-dh/2,dw,dh);
+  }
+  cx.restore();
+  const spRate=0.035*BEAM_INTENSITY;
+  if(Math.random()<spRate) spawnParticle(tX-8,tY+tH/2+(Math.random()-.5)*14,5.5,0,'proton');
+  if(t>1000&&prog>.2&&Math.random()<.04*BEAM_INTENSITY){
+    const ang=Math.PI*(Math.random()-.3);
+    // All secondary radiation is absorbed inside the gelatin (suppress=100%)
+    const stopX=gnpPxStart+Math.random()*gnpPxW;
+    const type3=Math.random()<.6?'gamma':'neutron';
+    spawnParticle(peakPx+(Math.random()-.5)*10,tY+tH/2+(Math.random()-.5)*16,3.5*Math.cos(ang),2.5*Math.sin(ang),type3,stopX);
+  }
+  tickParticles(.038,.04);
+  if(t>1000){
+    const ca=Math.min((t-1000)/700,1)*a;
+    const chartX=W*.08,chartY=tY+tH+52,chartW=W*.62,chartH=H*.37;
+    cx.save();cx.globalAlpha=ca;
+    drawChart({
+      x:chartX,y:chartY,w:chartW,h:chartH,xMax:MAXD,
+      title:`GNP gelatin (Au Z=79, ${GNP_CONC_MG} mg/mL) centred at z=${GNP_Z_CM.toFixed(1)}–${(GNP_Z_CM+GNP_T_CM).toFixed(1)} cm ON Bragg peak  |  ZERO dose past gelatin`,
+      gnpZ:GNP_Z_CM,gnpT:GNP_T_CM,
+      curves:[
+        {dd:DD_W,   col:'#00ffaa',lw:2.5,dash:[6,3],label:'Bragg peak — primary protons (no tail)'},
+        {dd:DD_TAIL,col:'#f87171',lw:2.0,dash:[5,3],label:`Nuclear tail — NO shield (~1.2% past peak)`},
+        {dd:DD_GNP, col:'#fbbf24',lw:3.0,filled:true,label:`With GNP gelatin — 100% absorbed, zero past gelatin`},
+      ],
+      progress:Math.min((t-1000)/4500,1)
+    });
+    if(ca>0.7&&prog>0.5){
+      const ra=Math.min((ca-0.7)/0.3,1);cx.save();cx.globalAlpha=ra;
+      const annX=chartX+50+(GNP_Z_CM/MAXD)*(chartW-66)+50;
+      const annY=chartY+28;const annH=H*.37-38;
+      const tailV=DD_TAIL[Math.floor((GNP_Z_CM+GNP_T_CM+2)/DZ)]/DMAX;
+      const gnpV=DD_GNP[Math.floor((GNP_Z_CM+GNP_T_CM+2)/DZ)]/DMAX;
+      const y1=annY+annH-tailV*annH*.9;const y2=annY+annH-gnpV*annH*.9;
+      if(y1>y2+4){
+        cx.strokeStyle='rgba(251,191,36,.6)';cx.lineWidth=1.2;
+        cx.beginPath();cx.moveTo(annX,y1);cx.lineTo(annX,y2);cx.stroke();
+        cx.beginPath();cx.moveTo(annX-5,y2+8);cx.lineTo(annX,y2+1);cx.lineTo(annX+5,y2+8);cx.stroke();
+        rr(annX+6,y1+(y2-y1)/2-9,94,18,4);cx.fillStyle='rgba(251,191,36,.1)';cx.fill();cx.strokeStyle='rgba(251,191,36,.35)';cx.lineWidth=.6;cx.stroke();
+        txt(`↓100% — ZERO`,annX+53,(y1+y2)/2,'#fbbf24',9.5,"'Orbitron',monospace");
+      }
+      cx.restore();
+    }
+    cx.restore();
+  }
+  if(t>2000){
+    const ia=Math.min((t-2000)/700,1)*a;
+    const iX2=W*.73,iY2=tY+tH+52,iW2=W*.21,iH2=H*.37;
+    cx.save();cx.globalAlpha=ia;
+    cx.fillStyle='rgba(2,6,20,.93)';cx.strokeStyle='rgba(251,191,36,.28)';cx.lineWidth=1.2;
+    rr(iX2,iY2,iW2,iH2,9);cx.fill();cx.stroke();
+    txt('Au GNP PHYSICS',iX2+iW2/2,iY2+18,'#fbbf24',11,'Rajdhani,sans-serif');
+    cx.strokeStyle='rgba(251,191,36,.2)';cx.lineWidth=.6;cx.beginPath();cx.moveTo(iX2+12,iY2+28);cx.lineTo(iX2+iW2-12,iY2+28);cx.stroke();
+    const rows2=[
+      ['Z = 79  A = 197','#fbbf24',10],['ρ = 19.3 g/cm³','#fbbf24',9.5],['conc. = 10 mg/mL','#a08020',9],
+      ['','',8],[`layer: ${GNP_T_CM} cm thick`,'#ccdde8',9.5],[`centre z=${(GNP_Z_CM+GNP_T_CM/2).toFixed(1)} cm`,'#ccdde8',9.5],
+      ['','',8],['γ ATTENUATION:','#f87171',10],['σ_PE ∝ Z⁴·⁵/E³·⁵','#00ffaa',10.5],['vs H₂O: ~1000×','#00ffaa',9.5],
+      ['Compton scatter','#a78bfa',9],['','',8],['n CAPTURE:','#f87171',10],['¹⁹⁷Au(n,γ)¹⁹⁸Au','#00ffaa',10],['σ_n = 98.7 barn','#a78bfa',9.5],
+      ['','',8],[`Tail absorbed:`,'#fbbf24',10.5],[`100% — zero past gel`,'#fbbf24',11.5],
+      ['','',8],['Bragg peak: intact ✓','#00ffaa',10],['OAR dose past gel: 0 ✓','#00ffaa',10],
+    ];
+    rows2.forEach(([tx,c,sz],i)=>{if(!tx) return;txt(tx,iX2+iW2/2,iY2+38+i*19,c,sz,'Rajdhani,sans-serif');});
+    cx.restore();
+  }
+  if(t>4000){
+    const fa=Math.min((t-4000)/600,1)*a;
+    cx.save();cx.globalAlpha=fa;
+    cx.fillStyle='rgba(251,191,36,.06)';cx.strokeStyle='rgba(251,191,36,.32)';cx.lineWidth=1.4;
+    rr(W*.04,tY+tH+52+H*.37+10,W*.92,46,8);cx.fill();cx.stroke();
+    txt(`GNP GELATIN ON BRAGG PEAK  |  Au NP (Z=79, ${GNP_CONC_MG} mg/mL, ${GNP_T_CM}cm)  centred at z=${(GNP_Z_CM+GNP_T_CM/2).toFixed(1)} cm  |  Bragg peak at ${peakZ(DD_W).toFixed(2)} cm INSIDE LAYER  |  ZERO dose past gelatin`,W*.5,tY+tH+52+H*.37+26,'#fbbf24',10,'Rajdhani,sans-serif');
+    txt(`Mechanism: σ_PE(Au)∝Z⁴·⁵/E³·⁵  |  ¹⁹⁷Au(n,γ)¹⁹⁸Au σ=98.7 barn  |  Compton scatter  |  Clinical: Complete OAR protection beyond gelatin  |  100% nuclear tail absorbed`,W*.5,tY+tH+52+H*.37+40,'#856a10',9.5,"'Share Tech Mono',monospace");
+    cx.restore();
+  }
+  document.getElementById('m0').innerHTML=`${peakZ(DD_W).toFixed(2)}<span class="met-u">cm</span>`;
+  document.getElementById('m5').innerHTML=`${(GNP_SUPPRESS*100).toFixed(0)}<span class="met-u">%</span>`;
+}
+
+const DRAW_FNS=[s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10];
+
+const SCENES=[
+  {
+    title:'APPARATUS OVERVIEW',num:'SCENE 1 / 11',
+    sub:`${E_INIT} MeV cyclotron → C/Al Degrader → TOF → DWC → Quad → Jelly → Scint.`,
+    dur:9000,si:0,
+    tag:'PROPOSAL: 270 MeV Clinical Bragg Peak Experiment',
+    body:`A ${E_INIT} MeV cyclotron produces a mixed beam (p + K⁺ + ¹⁰B⁵⁺), degraded to ${E0} MeV by a C or Al degrader (NIST PSTAR thickness). Two TOF scintillators (L=${TOF_L} cm) identify and select protons. A Drift Wire Chamber (DWC) measures beam diameter (5mm→2mm via quadrupole magnets). Proton pencil beam enters the muscle jelly phantom. Final scintillator records dose.`,
+    eq:`Beam: ${E_INIT}MeV → Degrader(${CURRENT_MAT}, ${DEGRAD_THICK.toFixed(2)}cm) → TOF(L=${TOF_L}cm) → DWC(5→2mm) → Jelly → Scint.`,
+    warn:null,onEnter:null
+  },
+  {
+    title:'DEGRADER MATERIALS — C vs Al',num:'SCENE 2 / 11',
+    sub:'Carbon (Graphite) vs Aluminium — NIST PSTAR stopping power tables',
+    dur:9000,si:1,
+    tag:'DEGRADER PHYSICS — NIST PSTAR MASS STOPPING POWER',
+    body:`Carbon (ρ=2.265 g/cm³, SP=2.82 MeV·cm²/g) and Aluminium (ρ=2.70 g/cm³, SP=3.08 MeV·cm²/g) are the two degrader materials. Thickness is from NIST PSTAR: d = ΔE / (SP × ρ). Carbon gives a thicker degrader while Al is thinner for the same energy loss.`,
+    eq:`d_C = ΔE/(SP_C × ρ_C) = ${DEGRADER_LOSS}/(2.82×2.265) = ${(DEGRADER_LOSS/(2.82*2.265)).toFixed(3)} cm   |   d_Al = ${DEGRADER_LOSS}/(3.08×2.70) = ${(DEGRADER_LOSS/(3.08*2.7)).toFixed(3)} cm`,
+    warn:'⚠ Carbon produces less angular straggling than Al due to lower Z — preferred for minimal beam spot degradation.',
+    onEnter:()=>{document.getElementById('m2').innerHTML=`${DEGRAD_THICK.toFixed(2)}<span class="met-u">cm</span>`;}
+  },
+  {
+    title:'DWC BEAM PROFILING',num:'SCENE 3 / 11',
+    sub:'Drift Wire Chamber — focus 5 mm beam spot to 2 mm pencil beam',
+    dur:9000,si:2,
+    tag:'DWC — BEAM DIAMETER MEASUREMENT & FOCUSING',
+    body:'The Drift Wire Chamber (DWC) measures the 2D beam profile by recording ionisation on a wire grid. Before quadrupole focusing, σ≈5 mm. Two quadrupoles bring the beam to σ≈2 mm for clinical pencil-beam delivery.',
+    eq:'I(r) = I₀ · exp(−r²/2σ²)   |   σ_initial = 5.0 mm → σ_final = 2.0 mm via quadrupole focusing',
+    warn:null,
+    onEnter:()=>{document.getElementById('m4').innerHTML=`2.0<span class="met-u">mm</span>`;}
+  },
+  {
+    title:'TOF DISCRIMINATION',num:'SCENE 4 / 11',
+    sub:'Relativistic TOF: proton selected as slowest particle at same magnetic rigidity',
+    dur:9000,si:3,
+    tag:'TOF PARTICLE ID: t = L/(β·c)',
+    body:`Two scintillators (L=${TOF_L} cm apart) measure flight time. At the same Bρ, protons are slowest → arrive latest → TOF gate selects them. K⁺ and B ions are rejected.`,
+    eq:`t = L/(β·c)  |  t_p=${TOF_DATA.tProton.toFixed(2)}ns  t_K=${TOF_DATA.tKaon.toFixed(2)}ns  |  Δt(p−K)=${TOF_DATA.dtPK.toFixed(2)}ns  >>  σ_TOF~0.2ns`,
+    warn:null,
+    onEnter:()=>{document.getElementById('m3').innerHTML=`${TOF_DATA.dtPK.toFixed(2)}<span class="met-u">ns</span>`;}
+  },
+  {
+    title:'BRAGG PEAK — MUSCLE JELLY',num:'SCENE 5 / 11',
+    sub:'Baseline depth-dose in tissue-equivalent phantom',
+    dur:9000,si:4,
+    tag:'BRAGG-KLEEMAN EMPIRICAL RULE',
+    body:`Proton beam deposits minimal dose in plateau, then maximum dose at the Bragg peak at ${RANGE.toFixed(2)} cm — confirmed by block-stack method.`,
+    eq:`R = α·Eᵖ = 0.0022 × ${E0}^1.77 = ${RANGE.toFixed(3)} cm`,
+    warn:null,
+    onEnter:()=>{document.getElementById('m0').innerHTML=`${peakZ(DD_W).toFixed(2)}<span class="met-u">cm</span>`;}
+  },
+  {
+    title:'BLOCK-STACK DETECTION',num:'SCENE 6 / 11',
+    sub:'Add 1cm WE blocks until scintillator signal drops — direct range measurement',
+    dur:12000,si:5,
+    tag:'EXPERIMENTAL METHOD — BLOCK-STACK BRAGG RANGE MEASUREMENT',
+    body:`Add 1 cm WE blocks between beam and scintillator. Signal rises, peaks at R=${RANGE.toFixed(2)} cm, then drops sharply. The depth at the drop = Bragg range, no curve fitting required.`,
+    eq:`Block-stack depth at drop = R = ${RANGE.toFixed(2)} cm   |   Nuclear tail: residual ~1.2% persists`,
+    warn:'⚠ Nuclear tail means signal never reaches 0% — the transition to ~1% plateau marks the range.',
+    onEnter:()=>{document.getElementById('m0').innerHTML=`${peakZ(DD_W).toFixed(2)}<span class="met-u">cm</span>`;}
+  },
+  {
+    title:'NUCLEAR INTERACTION TAIL',num:'SCENE 7 / 11',
+    sub:'~1.2% dose past Bragg peak from inelastic nuclear reactions',
+    dur:9000,si:6,
+    tag:'NUCLEAR TAIL — CONCEPTUAL IDENTIFICATION',
+    body:`Even past the range, ~1.2% dose tail persists from p + ¹⁶O → fragments + fast neutrons + γ. PSTAR models only EM stopping and misses this. This motivates the GNP gelatin shielding concept in Scene 11.`,
+    eq:'D_tail(z) = D_peak × 0.012 × exp(−(z − z_peak) / 3.0 cm)',
+    warn:'⚠ Nuclear tail deposits dose to OARs beyond tumour — motivates range margin and distal shielding strategies.',
+    onEnter:null
+  },
+  {
+    title:'BONE HETEROGENEITY — 0°',num:'SCENE 8 / 11',
+    sub:'Bone perpendicular to beam — WET = d × SPR = 1.65 cm',
+    dur:9000,si:7,
+    tag:'WATER EQUIVALENT THICKNESS — BONE AT 0°',
+    body:`Cortical bone (SPR=1.65) at 8 cm depth causes ${SHIFT0.toFixed(2)} cm range pull-back. Block-stack detects this directly.`,
+    eq:`WE = d × SPR = 1.0 × 1.65 = ${WET.toFixed(2)} cm   |   Δ = (SPR−1) × d = ${SHIFT0.toFixed(2)} cm pull-back`,
+    warn:null,
+    onEnter:()=>{document.getElementById('m1').innerHTML=`${SHIFT0.toFixed(2)}<span class="met-u">cm</span>`;}
+  },
+  {
+    title:'OBLIQUE BONE — 60°',num:'SCENE 9 / 11',
+    sub:'Maximum angle — effective path doubles, strong MCS penumbra',
+    dur:9000,si:8,
+    tag:'BONE AT 60° — MAXIMUM SHIFT IN SERIES',
+    body:`At 60°, effective bone path = d/cos60° = 2.0 cm, causing ${SHIFT60.toFixed(2)} cm range shift. Strong MCS at steep bone interface produces marked penumbra.`,
+    eq:`Eff. thickness = d/cosθ = 1.0/cos(60°) = 2.000 cm   |   Δ_60° = ${SHIFT60.toFixed(2)} cm (maximum in series)`,
+    warn:'⚠ At 60° the beam traverses nearly parallel to the bone surface — effective path doubles. Beam angle relative to bone is critical.',
+    onEnter:()=>{document.getElementById('m1').innerHTML=`${SHIFT60.toFixed(2)}<span class="met-u">cm</span>`;}
+  },
+  {
+    title:'CLINICAL RESULTS SUMMARY',num:'SCENE 10 / 11',
+    sub:'All features integrated — degrader, DWC, block-stack, bone, nuclear tail',
+    dur:12000,si:9,
+    tag:'COMPLETE EXPERIMENTAL RESULTS — 270 MeV CLINICAL EXPERIMENT',
+    body:`All features confirmed: ${E_INIT}→${E0} MeV via ${MATERIALS[CURRENT_MAT].name} degrader; DWC 5→2mm; TOF Δt=${TOF_DATA.dtPK.toFixed(2)} ns; block-stack R=${RANGE.toFixed(2)} cm; nuclear tail ~1.2%; bone shifts ${SHIFT0.toFixed(2)}→${SHIFT60.toFixed(2)} cm (0°→60°).`,
+    eq:`R=${RANGE.toFixed(2)}cm | WE=${WET.toFixed(2)}cm | Δ(0°)=${SHIFT0.toFixed(2)} | Δ(60°)=${SHIFT60.toFixed(2)}cm | Δt=${TOF_DATA.dtPK.toFixed(2)}ns | DWC 5→2mm | Block-stack ✓`,
+    warn:null,
+    onEnter:()=>{
+      document.getElementById('m0').innerHTML=`${peakZ(DD_W).toFixed(2)}<span class="met-u">cm</span>`;
+      document.getElementById('m1').innerHTML=`${SHIFT0.toFixed(2)}<span class="met-u">cm</span>`;
+      document.getElementById('m2').innerHTML=`${DEGRAD_THICK.toFixed(2)}<span class="met-u">cm</span>`;
+      document.getElementById('m3').innerHTML=`${TOF_DATA.dtPK.toFixed(2)}<span class="met-u">ns</span>`;
+      document.getElementById('m4').innerHTML=`2.0<span class="met-u">mm</span>`;
+    }
+  },
+  {
+    title:'GNP GELATIN — ON BRAGG PEAK',num:'SCENE 11 / 11',
+    sub:`Au NP gelatin (Z=79, ${GNP_CONC_MG} mg/mL) centred ON the Bragg peak — 100% tail absorption — zero dose past gelatin`,
+    dur:12000,si:10,
+    tag:'GOLD NANOPARTICLE GELATIN — CENTRED ON BRAGG PEAK — COMPLETE ABSORPTION',
+    body:`A gelatin matrix embedded with gold nanoparticles (Au, Z=79, ~${GNP_CONC_MG} mg/mL) is centred directly ON the Bragg peak (z=${GNP_Z_CM.toFixed(1)}–${(GNP_Z_CM+GNP_T_CM).toFixed(1)} cm, peak at ${peakZ(DD_W).toFixed(2)} cm, layer centre ${(GNP_Z_CM+GNP_T_CM/2).toFixed(2)} cm). The high-Z gold completely attenuates secondary γ radiation via the photoelectric effect (σ_PE ∝ Z⁴·⁵/E³·⁵ giving ~1000× enhancement over water) and captures fast neutrons via ¹⁹⁷Au(n,γ) (σ=98.7 barn). The primary proton Bragg peak is completely unaffected inside the gelatin, and dose is ZERO past the gelatin distal edge.`,
+    eq:`σ_PE(Au/H₂O) ≈ (79/7.5)⁴·⁵ ~ 1000×  |  ¹⁹⁷Au(n,γ)¹⁹⁸Au: σ=98.7 b  |  Tail: 100% absorbed  |  Bragg peak at ${peakZ(DD_W).toFixed(2)} cm INSIDE GNP LAYER  |  ZERO dose past gelatin`,
+    warn:'⚠ GNP activation (¹⁹⁸Au, T½=2.7 days) must be managed as a radioprotection consideration in clinical implementation.',
+    onEnter:()=>{
+      document.getElementById('m0').innerHTML=`${peakZ(DD_W).toFixed(2)}<span class="met-u">cm</span>`;
+      document.getElementById('m5').innerHTML=`${(GNP_SUPPRESS*100).toFixed(0)}<span class="met-u">%</span>`;
+    }
+  },
+];
+
+let cur=0,sT=0,playing=true,lastTS=null,speed=1;
+
+function applyScene(i){
+  cur=i;sT=0;PTCL.length=0;
+  const sc=SCENES[i];
+  document.getElementById('sc-num').textContent=sc.num;
+  document.getElementById('sc-ttl').textContent=sc.title;
+  document.getElementById('sc-sub').textContent=sc.sub;
+  document.getElementById('scard').style.opacity='1';
+  document.getElementById('an-tag').textContent=sc.tag;
+  document.getElementById('an-body').textContent=sc.body;
+  const eq=document.getElementById('an-eq');eq.textContent=sc.eq||'';eq.style.display=sc.eq?'block':'none';
+  const wn=document.getElementById('an-warn');wn.textContent=sc.warn||'';wn.style.display=sc.warn?'block':'none';
+  document.querySelectorAll('.st').forEach((el,j)=>{
+    el.classList.remove('active','done');
+    if(j===sc.si) el.classList.add('active');
+    else if(j<sc.si) el.classList.add('done');
+  });
+  document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('on',j===i));
+  document.getElementById('kv-s').textContent=`${i+1}/11`;
+  document.getElementById('kv-r').textContent=RANGE.toFixed(2)+' cm';
+  if(sc.onEnter) sc.onEnter();
+}
+
+const dotsEl=document.getElementById('dots');
+SCENES.forEach((_,i)=>{
+  const d=document.createElement('div');d.className='dot';d.onclick=()=>applyScene(i);
+  dotsEl.appendChild(d);
+});
+
+document.getElementById('b-prev').onclick=()=>applyScene((cur-1+SCENES.length)%SCENES.length);
+document.getElementById('b-next').onclick=()=>applyScene((cur+1)%SCENES.length);
+document.getElementById('b-export').onclick=downloadPython;
+document.getElementById('b-play').onclick=function(){playing=!playing;this.textContent=playing?'⏸ PAUSE':'▶ PLAY';};
+document.getElementById('b-spd').onclick=function(){speed=speed===1?2:speed===2?0.5:1;this.textContent=`${speed}× SPEED`;};
+
+document.querySelectorAll('.btn-m').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.btn-m').forEach(b=>b.classList.remove('active-m'));
+    btn.classList.add('active-m');CURRENT_MAT=btn.dataset.mat;recomputeAll();applyScene(cur);
+  });
+});
+
+document.querySelectorAll('.btn-e').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.btn-e').forEach(b=>b.classList.remove('active-e'));
+    btn.classList.add('active-e');DEGRADER_LOSS=parseInt(btn.dataset.loss);E0=E_INIT-DEGRADER_LOSS;recomputeAll();applyScene(cur);
+  });
+});
+
+document.getElementById('b-int').addEventListener('click',function(){
+  const steps=[0.5,1.0,1.5,2.0];const idx=steps.indexOf(BEAM_INTENSITY);
+  BEAM_INTENSITY=steps[(idx+1)%steps.length];this.textContent=`INT ${BEAM_INTENSITY}×`;
+  document.getElementById('kv-i').textContent=BEAM_INTENSITY+'×';
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='n') applyScene((cur+1)%SCENES.length);
+  if(e.key==='ArrowLeft'||e.key==='p') applyScene((cur-1+SCENES.length)%SCENES.length);
+  if(e.key===' '){playing=!playing;document.getElementById('b-play').textContent=playing?'⏸ PAUSE':'▶ PLAY';}
+});
+
+function loop(ts){
+  const dt=lastTS!=null?Math.min(ts-lastTS,50):16;lastTS=ts;
+  if(playing) sT+=dt*speed;
+  const sc=SCENES[cur];
+  if(sT>sc.dur+1000) applyScene((cur+1)%SCENES.length);
+  cx.clearRect(0,0,W,H);cx.fillStyle='#00020c';cx.fillRect(0,0,W,H);
+  const vig=cx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);
+  vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(0,0,0,.4)');
+  cx.fillStyle=vig;cx.fillRect(0,0,W,H);grid();
+  const tc=sT<1100?Math.min(sT/350,1):sT>sc.dur-700?Math.max((sc.dur-sT)/700,0):0;
+  document.getElementById('scard').style.opacity=tc;
+  DRAW_FNS[cur](sT);
+  document.getElementById('pb').style.width=Math.min(sT/sc.dur*100,100)+'%';
+  requestAnimationFrame(loop);
+}
+
+applyScene(0);
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
